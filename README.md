@@ -1,4 +1,4 @@
- TalkVerse - Text to Speech Website 🎤
+# TalkVerse - Text to Speech Website 🎤
 
 Welcome to TalkVerse!  
 This is a simple Text-to-Speech website where you can type text and make it speak in English or Hindi.
@@ -31,6 +31,7 @@ This is a simple Text-to-Speech website where you can type text and make it spea
 1. Fork this repository
 2. Make your changes
 3. Create a pull request  
-Help improve TalkVerse for everyone
+
+Help improve TalkVerse for everyone ❤️  
 
 Made with ❤️ by Zeeshan
