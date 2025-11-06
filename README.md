@@ -6,7 +6,7 @@ Type text and listen in English or Hindi with multiple voices, speed, and pitch 
 - English and Hindi voice support
 - Multiple browser voices (male/female)
 - Speed & pitch control
-- Mobile-friendly modern design
+- Desktop-friendly modern design
 - Optional MP3 download (via ElevenLabs API)
 
 ## How to Use
@@ -19,7 +19,3 @@ Type text and listen in English or Hindi with multiple voices, speed, and pitch 
 
 ## Technologies Used
 - HTML5, CSS3, JavaScript (Web Speech API / Optional TTS API)
-
-## Future Updates
-- More languages (Urdu, Punjabi, etc.)
-- Improved UI/UX
