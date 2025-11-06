@@ -5,45 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalkVerse - Text to Speech</title>
 <link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="container">
-    <h1>TalkVerse - Text to Speech</h1>
+    <header>
+        <h1>TalkVerse 🎤</h1>
+        <p>Type text below and listen in English or Hindi!</p>
+    </header>
 
-    <!-- Text Input -->
-    <div class="section">
-        <label for="text">Enter Your Text:</label>
-        <textarea id="text" placeholder="Type something here..."></textarea>
-    </div>
+    <main>
+        <!-- Textarea -->
+        <textarea id="text" placeholder="Type your text here..."></textarea>
 
-    <!-- Language / Voice Selection -->
-    <div class="section">
-        <label for="voiceSelect">Select Voice / Language:</label>
-        <select id="voiceSelect"></select>
-    </div>
+        <!-- Voice & Language -->
+        <div class="controls">
+            <label for="voiceSelect">Voice / Language</label>
+            <select id="voiceSelect"></select>
+        </div>
 
-    <!-- Speed Slider -->
-    <div class="section">
-        <label for="speed">Speed:</label>
-        <input type="range" id="speed" min="0.5" max="2" value="1" step="0.1">
-    </div>
+        <!-- Speed & Pitch -->
+        <div class="controls-slider">
+            <div>
+                <label for="speed">Speed</label>
+                <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div>
+                <label for="pitch">Pitch</label>
+                <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+            </div>
+        </div>
 
-    <!-- Pitch Slider -->
-    <div class="section">
-        <label for="pitch">Pitch:</label>
-        <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
-    </div>
+        <!-- Buttons -->
+        <div class="buttons">
+            <button id="generateVoiceBtn">Generate Voice</button>
+            <button id="downloadBtn">Download MP3</button>
+        </div>
+    </main>
 
-    <!-- Buttons -->
-    <div class="section">
-        <button id="generateVoiceBtn">Generate Voice</button>
-        <button id="downloadBtn">Download MP3</button>
-    </div>
+    <footer>
+        <p>Made with ❤️ by Zeeshan</p>
+    </footer>
 </div>
 
 <script src="script.js"></script>
 <script>
-    window.onload = () => document.body.classList.add('loaded');
+window.onload = () => document.body.classList.add('loaded');
 </script>
 </body>
 </html>
