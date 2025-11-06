@@ -15,16 +15,13 @@
     </header>
 
     <main>
-        <!-- Text Input -->
         <textarea id="text" placeholder="Type your text here..."></textarea>
 
-        <!-- Voice / Language -->
         <div class="controls">
             <label for="voiceSelect">Voice / Language</label>
             <select id="voiceSelect"></select>
         </div>
 
-        <!-- Speed & Pitch -->
         <div class="controls-slider">
             <div>
                 <label for="speed">Speed</label>
@@ -36,7 +33,6 @@
             </div>
         </div>
 
-        <!-- Buttons -->
         <div class="buttons">
             <button id="generateVoiceBtn">Generate Voice</button>
             <button id="downloadBtn">Download MP3</button>
