@@ -1,37 +1,56 @@
-# TalkVerse - Text to Speech Website 🎤
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>TalkVerse 🎤</h1>
+        <p>Type text below and listen in English or Hindi!</p>
+    </header>
 
-Welcome to TalkVerse!  
-This is a simple Text-to-Speech website where you can type text and make it speak in English or Hindi.
+    <main>
+        <!-- Text Input -->
+        <textarea id="text" placeholder="Type your text here..."></textarea>
 
-## Features
-- English and Hindi voice support 🇬🇧🇮🇳
-- Speed and pitch control for customization
-- Mobile-friendly design
-- Fully free, browser-based, no API key required
+        <!-- Voice / Language -->
+        <div class="controls">
+            <label for="voiceSelect">Voice / Language</label>
+            <select id="voiceSelect"></select>
+        </div>
 
-## How to Use
-1. Open the website: [TalkVerse Live](https://zeeshangamingforpc-dev.github.io/talkverse/)
-2. Type your text in the box
-3. Select language (English / Hindi)
-4. Adjust speed and pitch if needed
-5. Click Speak → The browser will read your text aloud 🎉
+        <!-- Speed & Pitch -->
+        <div class="controls-slider">
+            <div>
+                <label for="speed">Speed</label>
+                <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div>
+                <label for="pitch">Pitch</label>
+                <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+            </div>
+        </div>
 
-## Technologies Used
-- HTML5
-- CSS3
-- JavaScript (Web Speech API)
+        <!-- Buttons -->
+        <div class="buttons">
+            <button id="generateVoiceBtn">Generate Voice</button>
+            <button id="downloadBtn">Download MP3</button>
+        </div>
+    </main>
 
-## Future Updates
-- More languages (Urdu, Punjabi, etc.)
-- Download audio as MP3
-- Male/female voice selection
-- Improved user interface
+    <footer>
+        <p>Made with ❤️ by Zeeshan</p>
+    </footer>
+</div>
 
-## Contributing
-1. Fork this repository
-2. Make your changes
-3. Create a pull request  
-
-Help improve TalkVerse for everyone ❤️  
-
-Made with ❤️ by Zeeshan
+<script src="script.js"></script>
+<script>
+window.onload = () => document.body.classList.add('loaded');
+</script>
+</body>
+</html>
