@@ -10,10 +10,10 @@ let voices = [];
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
     voiceSelect.innerHTML = '';
-    voices.forEach(voice => {
+    voices.forEach(v => {
         const option = document.createElement('option');
-        option.textContent = `${voice.name} (${voice.lang})`;
-        option.value = voice.name;
+        option.textContent = `${v.name} (${v.lang})`;
+        option.value = v.name;
         voiceSelect.appendChild(option);
     });
 }
@@ -26,34 +26,19 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 // Generate Voice
 generateBtn.addEventListener('click', () => {
     const text = textArea.value.trim();
-    if (!text) { alert("Please type some text!"); return; }
+    if(!text){ alert("Please type some text!"); return; }
 
     const utterance = new SpeechSynthesisUtterance(text);
     const selectedVoice = voices.find(v => v.name === voiceSelect.value);
-    if (selectedVoice) utterance.voice = selectedVoice;
+    if(selectedVoice) utterance.voice = selectedVoice;
+
     utterance.rate = parseFloat(speed.value);
     utterance.pitch = parseFloat(pitch.value);
 
     speechSynthesis.speak(utterance);
 });
 
-// Download MP3 (placeholder using free TTS API)
+// Download MP3 (placeholder)
 downloadBtn.addEventListener('click', () => {
-    const text = textArea.value.trim();
-    if (!text) { alert("Please type some text!"); return; }
-
-    // Example: fetch free TTS API (replace YOUR_API_URL + KEY)
-    fetch("https://api.example.com/tts", {
-        method: "POST",
-        headers: { "Authorization": "Bearer YOUR_API_KEY", "Content-Type": "application/json" },
-        body: JSON.stringify({ text: text, voice: voiceSelect.value })
-    })
-    .then(res => res.blob())
-    .then(blob => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "tts.mp3";
-        a.click();
-    })
-    .catch(err => alert("Download API not set! Use free TTS API."));
+    alert("To enable MP3 download, integrate a free TTS API like ElevenLabs or TTSMP3.");
 });
