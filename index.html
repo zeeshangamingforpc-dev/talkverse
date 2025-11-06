@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkVerse - Text To Speech</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>TalkVerse — Text To Speech</h1>
+        <p>Convert text into realistic voiceovers instantly.</p>
+        <button class="btn" onclick="responsiveVoice.speak('Welcome to TalkVerse! The future of voice is here!', 'US English Male');">
+            ▶ Play Demo Voice
+        </button>
+    </header>
+
+    <!-- Text Input Section -->
+    <section class="tts-box">
+        <h2>Enter Text Below</h2>
+        <textarea id="textInput" placeholder="Type anything here..."></textarea><br>
+        <button class="btn" onclick="speakText()">Generate Voice</button>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 TalkVerse — Powered by Zeeshan
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
