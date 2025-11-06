@@ -23,7 +23,6 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = populateVoiceList;
 }
 
-// --- Browser TTS
 generateBtn.addEventListener('click', () => {
     const text = textArea.value.trim();
     if(!text){ alert("Please type some text!"); return; }
@@ -38,9 +37,8 @@ generateBtn.addEventListener('click', () => {
     speechSynthesis.speak(utterance);
 });
 
-// --- MP3 Download via ElevenLabs
 const YOUR_API_KEY = "sk_230b4ec8f5c96c9b33e2f52b3a6c9f953e694ecb2eaa5b13";
-const YOUR_VOICE_ID = "2EiwWnXFnvU5JabPnv8n"; // Update as needed
+const YOUR_VOICE_ID = "2EiwWnXFnvU5JabPnv8n";
 
 downloadBtn.addEventListener('click', () => {
     const text = textArea.value.trim();
