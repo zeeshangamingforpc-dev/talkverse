@@ -73,3 +73,75 @@ utterance.pitch = document.getElementById('pitch').value;
 window.speechSynthesis.speak(utterance);
 textarea { width: 95%; max-width: 600px; font-size: 18px; }
 button { width: 50%; max-width: 300px; font-size: 18px; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+  .container { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  h1 { text-align: center; color: #333; }
+  label { display: block; margin-top: 15px; font-weight: bold; }
+  textarea { width: 100%; height: 100px; font-size: 16px; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+  select, input[type=range] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: 1px solid #ccc; }
+  button { width: 100%; padding: 15px; margin-top: 20px; font-size: 18px; background: #007bff; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+  button:hover { background: #0056b3; }
+  .section { margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>TalkVerse - Text to Speech</h1>
+
+  <!-- Text Input Section -->
+  <div class="section">
+    <label for="text">Enter Your Text:</label>
+    <textarea id="text" placeholder="Type something here..."></textarea>
+  </div>
+
+  <!-- Language Selection -->
+  <div class="section">
+    <label for="voiceSelect">Select Language / Voice:</label>
+    <select id="voiceSelect">
+      <option value="en-US">English</option>
+      <option value="hi-IN">Hindi</option>
+    </select>
+  </div>
+
+  <!-- Speed Slider -->
+  <div class="section">
+    <label for="speed">Speed:</label>
+    <input type="range" id="speed" min="0.5" max="2" value="1" step="0.1">
+  </div>
+
+  <!-- Pitch Slider -->
+  <div class="section">
+    <label for="pitch">Pitch:</label>
+    <input type="range" id="pitch" min="0" max="2" value="1" step="0.1">
+  </div>
+
+  <!-- Speak Button -->
+  <button onclick="speakText()">Speak</button>
+</div>
+
+<script>
+function speakText() {
+  var text = document.getElementById('text').value;
+  var lang = document.getElementById('voiceSelect').value;
+  var speed = document.getElementById('speed').value;
+  var pitch = document.getElementById('pitch').value;
+
+  var utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = lang;
+  utterance.rate = speed;
+  utterance.pitch = pitch;
+
+  window.speechSynthesis.speak(utterance);
+}
+</script>
+</body>
+</html>
+
+
