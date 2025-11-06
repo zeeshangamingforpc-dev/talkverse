@@ -1,28 +1,56 @@
-# TalkVerse - Text to Speech Website 🎤
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>TalkVerse 🎤</h1>
+        <p>Type text and listen in English or Hindi!</p>
+    </header>
 
-Welcome to TalkVerse!  
-Type text and listen in English or Hindi with multiple voices, speed, and pitch control.
+    <main>
+        <!-- Text Input -->
+        <textarea id="text" placeholder="Type your text here..."></textarea>
 
-## Features
-- English and Hindi voice support
-- Multiple browser voices (male/female)
-- Speed & pitch control
-- Mobile-friendly modern design
-- Optional MP3 download (via ElevenLabs API)
+        <!-- Voice / Language -->
+        <div class="controls">
+            <label for="voiceSelect">Voice / Language</label>
+            <select id="voiceSelect"></select>
+        </div>
 
-## How to Use
-1. Open the website
-2. Type your text
-3. Select voice/language
-4. Adjust speed & pitch
-5. Click **Generate Voice** → Listen instantly
-6. Optional: **Download MP3** using API
+        <!-- Speed & Pitch -->
+        <div class="controls-slider">
+            <div>
+                <label for="speed">Speed</label>
+                <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+            </div>
+            <div>
+                <label for="pitch">Pitch</label>
+                <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+            </div>
+        </div>
 
-## Technologies Used
-- HTML5
-- CSS3
-- JavaScript (Web Speech API / Optional TTS API)
+        <!-- Buttons -->
+        <div class="buttons">
+            <button id="generateVoiceBtn">Generate Voice</button>
+            <button id="downloadBtn">Download MP3</button>
+        </div>
+    </main>
 
-## Future Updates
-- More languages (Urdu, Punjabi, etc.)
-- Improved UI/UX
+    <footer>
+        <p>Made with ❤️ by Zeeshan</p>
+    </footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+window.onload = () => document.body.classList.add('loaded');
+</script>
+</body>
+</html>
