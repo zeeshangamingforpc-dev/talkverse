@@ -7,6 +7,7 @@ const pitch = document.getElementById('pitch');
 
 let voices = [];
 
+// Browser voices
 function populateVoiceList() {
     voices = speechSynthesis.getVoices();
     voiceSelect.innerHTML = '';
@@ -38,33 +39,29 @@ generateBtn.addEventListener('click', () => {
     speechSynthesis.speak(utterance);
 });
 
-// Download MP3 (placeholder)
+// MP3 Download using ElevenLabs API
+const YOUR_API_KEY = "sk_230b4ec8f5c96c9b33e2f52b3a6c9f953e694ecb2eaa5b13";
+const YOUR_VOICE_ID = "DUhjXXCXHQWckglMUnOv";
+
 downloadBtn.addEventListener('click', () => {
-    alert("To enable MP3 download, integrate a free TTS API like ElevenLabs or TTSMP3.");
-});
-const text = document.getElementById('text').value.trim();
-if(!text){ alert("Type some text first!"); return; }
+    const text = textArea.value.trim();
+    if(!text){ alert("Please type some text!"); return; }
 
-fetch("https://api.elevenlabs.io/v1/text-to-speech/YOUR_VOICE_ID", {
-    method: "POST",
-    headers: {
-        "Accept": "audio/mpeg",
-        "Content-Type": "application/json",
-        "xi-api-key": "YOUR_API_KEY"
-    },
-    body: JSON.stringify({
-        text: text,
-        voice: "alloy"  // example voice, API dependent
+    fetch(`https://api.elevenlabs.io/v1/text-to-speech/${YOUR_VOICE_ID}`, {
+        method: "POST",
+        headers: {
+            "Accept": "audio/mpeg",
+            "Content-Type": "application/json",
+            "xi-api-key": YOUR_API_KEY
+        },
+        body: JSON.stringify({ text: text, voice: "alloy" })
     })
-})
-.then(res => res.blob())
-.then(blob => {
-    // Create a download link
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = "tts.mp3";
-    a.click();
-})
-.catch(err => console.error("Error generating MP3:", err));
-
-<button id="downloadBtn">Download MP3</button>
+    .then(res => res.blob())
+    .then(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "tts.mp3";
+        a.click();
+    })
+    .catch(err => alert("MP3 download failed!"));
+});
