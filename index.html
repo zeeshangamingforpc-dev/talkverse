@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - Text to Speech</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav class="navbar">
-        <h1 class="logo">TalkVerse</h1>
-    </nav>
+<nav class="navbar">
+    <h1 class="logo">TalkVerse</h1>
+</nav>
 
-    <div class="container">
+<div class="container">
 
-        <h1 class="main-title">Text to Speech Converter 🎙️</h1>
+    <h1 class="main-title">Text to Speech Converter 🎙️</h1>
 
-        <textarea id="textInput" placeholder="Enter your story text here..."></textarea>
+    <textarea id="textInput" placeholder="Enter text…"></textarea>
 
-        <div class="controls">
+    <div class="controls">
+        <div class="control">
+            <label for="voiceSelect">Voice</label>
             <select id="voiceSelect">
                 <option value="2EiwWnXFnvU5JabPnv8n">Eric (English Male)</option>
             </select>
-
-            <button id="speakBtn">🔊 Speak</button>
-            <button id="downloadBtn">⬇ Download</button>
         </div>
 
-        <audio id="audioPlayer" controls></audio>
+        <div class="control">
+            <label for="speed">Speed</label>
+            <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+        </div>
 
+        <div class="control">
+            <label for="pitch">Pitch</label>
+            <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+        </div>
     </div>
 
-    <script src="script.js"></script>
+    <button id="generateBtn">🎤 Generate Voice</button>
+
+    <audio id="audioPlayer" controls></audio>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
