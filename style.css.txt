@@ -1,7 +1,5 @@
-/* Reset */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* Body */
 body {
     font-family: 'Roboto', sans-serif;
     background: #f9f9f9;
@@ -15,7 +13,6 @@ body {
 
 body.loaded { opacity: 1; }
 
-/* Container */
 .container {
     background: #fff;
     width: 90%;
@@ -25,12 +22,10 @@ body.loaded { opacity: 1; }
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
-/* Header */
 header { text-align: center; margin-bottom: 20px; }
 header h1 { font-size: 2.2rem; color: #007bff; }
 header p { font-size: 1rem; color: #555; margin-top: 5px; }
 
-/* Textarea */
 textarea {
     width: 100%;
     height: 150px;
@@ -42,7 +37,6 @@ textarea {
     margin-bottom: 20px;
 }
 
-/* Controls */
 .controls, .controls-slider {
     display: flex;
     justify-content: space-between;
@@ -56,7 +50,6 @@ textarea {
     border: 1px solid #ccc;
 }
 
-/* Buttons */
 .buttons {
     display: flex;
     justify-content: space-between;
@@ -78,10 +71,8 @@ button {
 button:hover { opacity: 0.9; }
 button:active { transform: scale(0.97); }
 
-/* Footer */
 footer { text-align: center; margin-top: 25px; color: #777; font-size: 0.9rem; }
 
-/* Responsive */
 @media(max-width: 600px){
     .controls, .controls-slider, .buttons { flex-direction: column; }
     .controls select, .controls-slider input, button { width: 100%; margin-bottom: 10px; }
