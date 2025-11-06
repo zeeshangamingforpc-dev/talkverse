@@ -60,3 +60,16 @@
   </script>
 </body>
 </html>
+
+<label>Speed: </label>
+<input type="range" id="speed" min="0.5" max="2" value="1" step="0.1"><br><br>
+
+<label>Pitch: </label>
+<input type="range" id="pitch" min="0" max="2" value="1" step="0.1"><br><br>
+var utterance = new SpeechSynthesisUtterance(text);
+utterance.lang = lang;
+utterance.rate = document.getElementById('speed').value;
+utterance.pitch = document.getElementById('pitch').value;
+window.speechSynthesis.speak(utterance);
+textarea { width: 95%; max-width: 600px; font-size: 18px; }
+button { width: 50%; max-width: 300px; font-size: 18px; }
