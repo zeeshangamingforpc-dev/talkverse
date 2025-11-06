@@ -1,47 +1,5 @@
-const textArea = document.getElementById('text');
-const voiceSelect = document.getElementById('voiceSelect');
-const generateBtn = document.getElementById('generateVoiceBtn');
-const downloadBtn = document.getElementById('downloadBtn');
-const speed = document.getElementById('speed');
-const pitch = document.getElementById('pitch');
-
-let voices = [];
-
-// Browser voices
-function populateVoiceList() {
-    voices = speechSynthesis.getVoices();
-    voiceSelect.innerHTML = '';
-    voices.forEach(v => {
-        const option = document.createElement('option');
-        option.textContent = `${v.name} (${v.lang})`;
-        option.value = v.name;
-        voiceSelect.appendChild(option);
-    });
-}
-
-populateVoiceList();
-if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = populateVoiceList;
-}
-
-// Generate Voice
-generateBtn.addEventListener('click', () => {
-    const text = textArea.value.trim();
-    if(!text){ alert("Please type some text!"); return; }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    const selectedVoice = voices.find(v => v.name === voiceSelect.value);
-    if(selectedVoice) utterance.voice = selectedVoice;
-
-    utterance.rate = parseFloat(speed.value);
-    utterance.pitch = parseFloat(pitch.value);
-
-    speechSynthesis.speak(utterance);
-});
-
-// MP3 Download using ElevenLabs API
 const YOUR_API_KEY = "sk_230b4ec8f5c96c9b33e2f52b3a6c9f953e694ecb2eaa5b13";
-const YOUR_VOICE_ID = "DUhjXXCXHQWckglMUnOv";
+const YOUR_VOICE_ID = "2EiwWnXFnvU5JabPnv8n"; // <- New Voice ID
 
 downloadBtn.addEventListener('click', () => {
     const text = textArea.value.trim();
