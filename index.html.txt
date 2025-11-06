@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TalkVerse - Desi TTS</title>
+  <style>
+    body { 
+      font-family: Arial, sans-serif; 
+      text-align: center; 
+      background: #f9f9f9; 
+      margin-top: 50px; 
+    }
+    h1 { color: #333; }
+    textarea { 
+      font-size: 18px; 
+      padding: 10px; 
+      width: 80%; 
+      max-width: 600px; 
+      border-radius: 5px; 
+      border: 1px solid #ccc; 
+    }
+    select { 
+      font-size: 16px; 
+      padding: 5px; 
+      margin-top: 10px; 
+    }
+    button { 
+      padding: 10px 20px; 
+      font-size: 18px; 
+      cursor: pointer; 
+      margin-top: 15px; 
+      border-radius: 5px; 
+      background-color: #007bff; 
+      color: white; 
+      border: none; 
+    }
+    button:hover { background-color: #0056b3; }
+  </style>
+</head>
+<body>
+  <h1>TalkVerse - Desi Text to Speech</h1>
+  <textarea id="text" rows="5" placeholder="Bhai yahan type karo..."></textarea><br><br>
+  <select id="voiceSelect">
+    <option value="en-US">English</option>
+    <option value="hi-IN">Hindi</option>
+  </select><br><br>
+  <button onclick="speakText()">Speak</button>
+
+  <script>
+    function speakText() {
+      var text = document.getElementById('text').value;
+      var lang = document.getElementById('voiceSelect').value;
+      if(text !== "") {
+        var utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = lang;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        alert("Bhai pehle kuch type karo!");
+      }
+    }
+  </script>
+</body>
+</html>
