@@ -11,7 +11,7 @@
 <div class="container">
     <header>
         <h1>TalkVerse 🎤</h1>
-        <p>Type text below and listen in English or Hindi!</p>
+        <p>Type text and listen in English or Hindi!</p>
     </header>
 
     <main>
