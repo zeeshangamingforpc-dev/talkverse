@@ -1,36 +1,38 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - Text To Speech</title>
+    <title>TalkVerse - Text to Speech</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 </head>
+
 <body>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <h1>TalkVerse — Text To Speech</h1>
-        <p>Convert text into realistic voiceovers instantly.</p>
-        <button class="btn" onclick="responsiveVoice.speak('Welcome to TalkVerse! The future of voice is here!', 'US English Male');">
-            ▶ Play Demo Voice
-        </button>
-    </header>
+    <nav class="navbar">
+        <h2 class="logo">TalkVerse</h2>
+    </nav>
 
-    <!-- Text Input Section -->
-    <section class="tts-box">
-        <h2>Enter Text Below</h2>
-        <textarea id="textInput" placeholder="Type anything here..."></textarea><br>
-        <button class="btn" onclick="speakText()">Generate Voice</button>
-    </section>
+    <div class="container">
 
-    <!-- Footer -->
-    <footer>
-        © 2025 TalkVerse — Powered by Zeeshan
-    </footer>
+        <h1>Text to Speech Converter 🎙️</h1>
+
+        <textarea id="textInput" placeholder="Enter your story text here..."></textarea>
+
+        <div class="controls">
+            <select id="voiceSelect">
+                <option value="2EiwWnXFnvU5JabPnv8n">Eric (English Male)</option>
+            </select>
+
+            <button id="speakBtn">🔊 Speak</button>
+            <button id="downloadBtn">⬇ Download</button>
+        </div>
+
+        <audio id="audioPlayer" controls></audio>
+
+    </div>
 
     <script src="script.js"></script>
+
 </body>
 </html>
