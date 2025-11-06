@@ -21,4 +21,4 @@ TalkVerse is a modern, professional Text-to-Speech (TTS) web application that co
 1. Clone the repository or download the files:
 
    ```bash
-   git clone https://github.com/yourusername/talkverse.git
+   git clone (https://zeeshangamingforpc-dev.github.io/talkverse/)
