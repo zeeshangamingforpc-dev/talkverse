@@ -15,8 +15,8 @@ body.loaded { opacity: 1; }
 
 .container {
     background: #fff;
-    width: 80%;          /* Desktop width */
-    max-width: 1000px;   /* Maximum container width */
+    width: 80%;
+    max-width: 1000px;
     padding: 40px;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
