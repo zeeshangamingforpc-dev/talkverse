@@ -14,13 +14,12 @@ body {
 body.loaded { opacity: 1; }
 
 .container {
-    width: 90%;          /* Desktop width */
-    max-width: 1200px;   /* Maximum width for large screens */
-    min-width: 700px;    /* Minimum width for smaller desktops */
-    margin: 0 auto;      /* Center container */
+    background: #fff;
+    width: 80%;          /* Desktop default */
+    max-width: 1000px;   /* Desktop max width */
+    margin: 0 auto;
     padding: 40px;
     border-radius: 15px;
-    background: #fff;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
@@ -75,12 +74,20 @@ button:active { transform: scale(0.97); }
 
 footer { text-align: center; margin-top: 25px; color: #777; font-size: 0.9rem; }
 
-@media(max-width: 1200px){
-    .container { width: 95%; min-width: auto; }
-}
-
+/* Mobile-friendly adjustments */
 @media(max-width: 768px){
-    .container { width: 95%; padding: 20px; }
-    .controls, .controls-slider, .buttons { flex-direction: column; }
-    .controls select, .controls-slider input, button { width: 100%; margin-bottom: 10px; }
+    .container {
+        width: 95%;        /* almost full width */
+        max-width: 100%;   /* override desktop max-width */
+        padding: 20px;
+    }
+
+    .controls, .controls-slider, .buttons {
+        flex-direction: column;
+    }
+
+    .controls select, .controls-slider input, button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
 }
