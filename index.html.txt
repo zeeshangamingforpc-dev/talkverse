@@ -15,10 +15,10 @@
     </header>
 
     <main>
-        <!-- Textarea -->
+        <!-- Text Input -->
         <textarea id="text" placeholder="Type your text here..."></textarea>
 
-        <!-- Voice & Language -->
+        <!-- Voice / Language -->
         <div class="controls">
             <label for="voiceSelect">Voice / Language</label>
             <select id="voiceSelect"></select>
