@@ -1,4 +1,5 @@
 const speakBtn = document.getElementById('speak-btn');
+const downloadBtn = document.getElementById('download-btn');
 const textInput = document.getElementById('text-input');
 const audio = document.getElementById('audio');
 const progress = document.getElementById('progress');
@@ -11,8 +12,10 @@ speakBtn.addEventListener('click', async () => {
     return;
   }
 
-  progress.innerText = "Generating speech...";
-  
+  progress.style.display = "block";
+  progress.innerHTML = '<span></span>';
+  downloadBtn.style.display = "none";
+
   try {
     const response = await fetch('/tts', {
       method: 'POST',
@@ -21,10 +24,15 @@ speakBtn.addEventListener('click', async () => {
     });
 
     const blob = await response.blob();
-    audio.src = URL.createObjectURL(blob);
-    progress.innerText = "Done!";
+    const url = URL.createObjectURL(blob);
+    audio.src = url;
+    downloadBtn.href = url;
+    downloadBtn.download = 'speech.mp3';
+    downloadBtn.style.display = "inline-block";
+    progress.style.display = "none";
   } catch (err) {
     console.error(err);
-    progress.innerText = "Error generating speech.";
+    progress.style.display = "none";
+    alert("Error generating speech.");
   }
 });
