@@ -3,19 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text-to-Speech (Eric)</title>
+  <title>TalkVerse - Text to Speech</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
   <div class="container">
-    <h1>Text-to-Speech (Eric)</h1>
-    <textarea id="text-input" placeholder="Enter your text here..."></textarea>
-    <button id="speak-btn">Generate Speech</button>
-    <audio id="audio" controls></audio>
-    <button id="download-btn" style="display:none;">Download MP3</button>
-    <div id="progress"></div>
+    <header>
+      <h1>TalkVerse</h1>
+    </header>
+
+    <main>
+      <h2><i class="fas fa-microphone"></i> Text to Speech Converter</h2>
+      <textarea id="text-input" placeholder="Paste your text here..."></textarea>
+
+      <div class="controls">
+        <div class="control-group">
+          <label for="voice">Voice:</label>
+          <select id="voice">
+            <option value="gP8LZQ3GGokV0MP5JYjg">Eric (Male)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="speed">Speed: <span id="speed-value">1x</span></label>
+          <input type="range" id="speed" min="0.5" max="2" value="1" step="0.1">
+        </div>
+
+        <div class="control-group">
+          <label for="pitch">Pitch: <span id="pitch-value">1x</span></label>
+          <input type="range" id="pitch" min="0.5" max="2" value="1" step="0.1">
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button id="speak-btn"><i class="fas fa-play"></i> Generate Voice</button>
+        <a id="download-btn" href="#" download="speech.mp3"><i class="fas fa-download"></i> Download Audio</a>
+      </div>
+
+      <div id="progress"><span></span> Generating Voice: 0%</div>
+
+      <audio id="audio" controls></audio>
+    </main>
+
+    <footer>
+      <p>Created By Zeeshan</p>
+    </footer>
   </div>
-  
+
   <script src="script.js"></script>
 </body>
 </html>
