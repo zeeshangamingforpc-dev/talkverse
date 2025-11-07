@@ -1,17 +1,18 @@
 # TalkVerse - Text to Speech Website 🎙️
 
-TalkVerse is a professional Text-to-Speech web app with a sleek dark-glass design. Convert text into natural-sounding speech with adjustable speed and pitch.
+TalkVerse is a professional Text-to-Speech web app with multiple voices and adjustable speed & pitch.
 
-Live Demo: [https://zeeshangamingforpc-dev.github.io/talkverse/](https://zeeshangamingforpc-dev.github.io/talkverse/)
+Live Demo: https://zeeshangamingforpc-dev.github.io/talkverse/
 
 ---
 
 ## Features
-- Enter text and convert to speech
-- Adjust voice speed and pitch
-- Play generated audio in-browser
-- Download the generated audio as MP3
-- Both buttons (Generate & Download) are same size
+- Choose voice (Male/Female/Custom)  
+- Enter text and convert to speech  
+- Adjust speed and pitch  
+- Play generated audio in-browser  
+- Download the generated audio as MP3  
+- Buttons same size, glowing effect  
 - Footer: Created By Zeeshan
 
 ---
@@ -20,16 +21,25 @@ Live Demo: [https://zeeshangamingforpc-dev.github.io/talkverse/](https://zeeshan
 
 ### Backend
 1. Open terminal in `backend/`
-2. Run:
-```bash
+2. Create `.env` with your API key:
+\`\`\`
+OPENAI_API_KEY=your-api-key-here
+PORT=3000
+\`\`\`
+3. Run:
+\`\`\`
 npm install
 node index.js
+\`\`\`
+4. Backend runs on http://localhost:3000
+
+### Frontend
+1. Open `frontend/index.html` in Chrome or via local server.
+2. Enter text, select voice, adjust speed/pitch, click **Generate Voice**.
+3. Click **Download Audio** to save the speech.
+
+> ⚠️ For live deployment, update fetch URL in `script.js` to your hosted backend.
 
 ---
 
-✅ **All missing parts fixed:**
-- Buttons same size  
-- Footer included  
-- TTS generation fixed with local backend  
-- README updated with instructions  
-- Fully professional UI  
+**Created By Zeeshan**
