@@ -1,55 +1,42 @@
 const textInput = document.getElementById("textInput");
 const voiceSelect = document.getElementById("voiceSelect");
-const speedSlider = document.getElementById("speed");
-const pitchSlider = document.getElementById("pitch");
+const speed = document.getElementById("speed");
+const pitch = document.getElementById("pitch");
 const speedValue = document.getElementById("speedValue");
 const pitchValue = document.getElementById("pitchValue");
-const generateBtn = document.getElementById("generateBtn");
+const speakBtn = document.getElementById("speakBtn");
 const downloadBtn = document.getElementById("downloadBtn");
 const audioPlayer = document.getElementById("audioPlayer");
 
-let audioBlob = null;
+speed.addEventListener("input", () => speedValue.textContent = speed.value + "x");
+pitch.addEventListener("input", () => pitchValue.textContent = pitch.value + "x");
 
-speedSlider.addEventListener("input", () => speedValue.textContent = speedSlider.value + "x");
-pitchSlider.addEventListener("input", () => pitchValue.textContent = pitchSlider.value + "x");
-
-async function generateSpeech() {
-    const text = textInput.value.trim();
+speakBtn.addEventListener("click", async () => {
+    const text = textInput.value;
     const voice = voiceSelect.value;
-    const speed = parseFloat(speedSlider.value);
-    const pitch = parseFloat(pitchSlider.value);
 
-    if (!text) { alert("Please enter some text!"); return; }
+    if (!text) return alert("Please enter text!");
 
     try {
         const response = await fetch("http://localhost:3000/tts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ text, voice, speed, pitch })
+            body: JSON.stringify({ text, voice })
         });
 
-        if (!response.ok) { throw new Error(`HTTP error! status: ${response.status}`); }
-
-        audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayer.src = audioUrl;
-        audioPlayer.play();
-
+        if (!response.ok) throw new Error("Network response not ok");
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        audioPlayer.src = url;
     } catch (err) {
         console.error(err);
-        alert("Error generating speech! Check console for details.");
+        alert("Error generating speech! Check console.");
     }
-}
+});
 
-function downloadAudio() {
-    if (!audioBlob) { alert("Generate audio first!"); return; }
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(audioBlob);
-    a.download = "TalkVerse_Audio.mp3";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-}
-
-generateBtn.addEventListener("click", generateSpeech);
-downloadBtn.addEventListener("click", downloadAudio);
+downloadBtn.addEventListener("click", () => {
+    const link = document.createElement("a");
+    link.href = audioPlayer.src;
+    link.download = "voice.mp3";
+    link.click();
+});
