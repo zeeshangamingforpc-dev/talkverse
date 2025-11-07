@@ -1,24 +1,43 @@
-# TalkVerse - Text to Speech
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar">
+<h2 class="logo">TalkVerse</h2>
+</nav>
 
-## How to Run
+<div class="container">
+<h1>Text to Speech Converter 🎙️</h1>
 
-1. Open terminal → go to backend folder:
-   cd backend
+<textarea id="textInput" placeholder="Paste your text here..."></textarea>
 
-2. Install dependencies:
-   npm install express node-fetch cors dotenv
+<div class="controls">
+<label for="voiceSelect">Select Voice</label>
+<select id="voiceSelect">
+<option value="ErXwobaYiN019PkySvjV">Eric (Male)</option>
+<option value="MF3mGyEYCl7XYWbV9V6O">Allison (Female)</option>
+</select>
 
-3. Run backend:
-   node index.js
+<label for="speed">Speed: <span id="speedVal">1x</span></label>
+<input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
 
-4. Open index.html in browser → paste text → choose voice → set speed & pitch → generate → download.
+<label for="pitch">Pitch: <span id="pitchVal">1x</span></label>
+<input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
 
-5. Make sure backend is running, otherwise speech generation won't work.
+<button id="generateBtn">🎤 Generate Voice</button>
+<button id="downloadBtn">📥 Download Audio</button>
+</div>
 
-## Voices
-- Eric (Male) → ErXwobaYiN019PkySvjV
-- Allison (Female) → MF3mGyEYCl7XYWbV9V6O
+<audio id="audioPlayer" controls></audio>
 
-## Notes
-- Keep your API key private
-- For multiple devices, host backend online (Railway/Render) and update fetch URL
+<p class="footer">Created By Zeeshan</p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
