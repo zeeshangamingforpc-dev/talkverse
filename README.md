@@ -1,43 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TalkVerse - Text to Speech</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<nav class="navbar">
-<h2 class="logo">TalkVerse</h2>
-</nav>
+# TalkVerse - Text to Speech Converter 🎙️
 
-<div class="container">
-<h1>Text to Speech Converter 🎙️</h1>
+TalkVerse is a modern web app that converts text into natural-sounding speech using **ElevenLabs API**.  
+It allows you to select voices, adjust **speed** and **pitch**, play the generated audio, and download it as MP3.  
 
-<textarea id="textInput" placeholder="Paste your text here..."></textarea>
+---
 
-<div class="controls">
-<label for="voiceSelect">Select Voice</label>
-<select id="voiceSelect">
-<option value="ErXwobaYiN019PkySvjV">Eric (Male)</option>
-<option value="MF3mGyEYCl7XYWbV9V6O">Allison (Female)</option>
-</select>
+## Features
 
-<label for="speed">Speed: <span id="speedVal">1x</span></label>
-<input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+- ✅ Multiple voices (Male/Female)  
+- ✅ Adjustable speed (0.5x – 2x)  
+- ✅ Adjustable pitch (0.5x – 2x)  
+- ✅ Play audio directly in browser  
+- ✅ Download audio as MP3  
+- ✅ Fully functional frontend & backend  
 
-<label for="pitch">Pitch: <span id="pitchVal">1x</span></label>
-<input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+---
 
-<button id="generateBtn">🎤 Generate Voice</button>
-<button id="downloadBtn">📥 Download Audio</button>
-</div>
-
-<audio id="audioPlayer" controls></audio>
-
-<p class="footer">Created By Zeeshan</p>
-</div>
-
-<script src="script.js"></script>
-</body>
-</html>
+## Created By Zeeshan
