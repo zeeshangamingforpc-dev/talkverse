@@ -2,44 +2,40 @@ import express from "express";
 import fetch from "node-fetch";
 import cors from "cors";
 import dotenv from "dotenv";
-
 dotenv.config();
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 const API_KEY = process.env.OPENAI_API_KEY;
-const PORT = process.env.PORT || 3000;
 
 app.post("/tts", async (req, res) => {
-  try {
-    const { text, voice, speed, pitch } = req.body;
-    if (!text || !voice) return res.status(400).send("Text or voice missing!");
+    try {
+        const { text, voice, speed, pitch } = req.body;
 
-    const response = await fetch("https://api.openai.com/v1/audio/speech", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini-tts",
-        voice: voice,
-        input: text,
-        speed: parseFloat(speed),
-        pitch: parseFloat(pitch)
-      })
-    });
+        const response = await fetch("https://api.openai.com/v1/audio/speech", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4o-mini-tts",
+                voice: voice,
+                input: text
+            })
+        });
 
-    if (!response.ok) throw new Error(`OpenAI TTS error: ${response.statusText}`);
+        const buffer = await response.arrayBuffer();
+        res.set("Content-Type", "audio/mpeg");
+        res.send(Buffer.from(buffer));
 
-    const buffer = await response.arrayBuffer();
-    res.set("Content-Type", "audio/mpeg");
-    res.send(Buffer.from(buffer));
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Error generating speech");
-  }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error generating speech");
+    }
 });
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
