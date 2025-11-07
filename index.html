@@ -1,54 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TalkVerse - Text to Speech</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
+<nav class="navbar">
+    <h2 class="logo">TalkVerse</h2>
+</nav>
 
-  <header>
-    <h1>TalkVerse 🎙️</h1>
-    <p>Text to Speech Converter</p>
-  </header>
-
-  <main class="container">
+<div class="container">
+    <h1>Text to Speech Converter 🎙️</h1>
     <textarea id="textInput" placeholder="Paste your text here..."></textarea>
 
     <div class="controls">
-      <div class="control">
-        <label for="voiceSelect">Select Voice</label>
         <select id="voiceSelect">
-          <option value="Eric">Eric (Male)</option>
-          <option value="Allison">Allison (Female)</option>
-          <option value="Brian">Brian (Male)</option>
+            <option value="ErXwobaYiN019PkySvjV">Eric (Male)</option>
+            <option value="MF3mGyEYCl7XYWbV9V6O">Allison (Female)</option>
         </select>
-      </div>
-
-      <div class="control">
-        <label for="speed">Speed: <span id="speedValue">1x</span></label>
+        <label>Speed: <span id="speedValue">1x</span></label>
         <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
-      </div>
-
-      <div class="control">
-        <label for="pitch">Pitch: <span id="pitchValue">1x</span></label>
+        <label>Pitch: <span id="pitchValue">1x</span></label>
         <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
-      </div>
     </div>
 
     <div class="buttons">
-      <button id="generateBtn">🎤 Generate Voice</button>
-      <button id="downloadBtn">📥 Download Audio</button>
+        <button id="speakBtn">🎤 Generate Voice</button>
+        <button id="downloadBtn">📥 Download Audio</button>
     </div>
 
     <audio id="audioPlayer" controls></audio>
-  </main>
+</div>
 
-  <footer>
-    Created By Zeeshan
-  </footer>
+<footer>
+    Created by Zeeshan
+</footer>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
