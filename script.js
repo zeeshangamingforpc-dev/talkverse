@@ -9,13 +9,8 @@ const pitchValue = document.getElementById('pitch-value');
 const audio = document.getElementById('audio');
 const progress = document.getElementById('progress');
 
-speedSlider.addEventListener('input', () => {
-  speedValue.innerText = speedSlider.value + "x";
-});
-
-pitchSlider.addEventListener('input', () => {
-  pitchValue.innerText = pitchSlider.value + "x";
-});
+speedSlider.addEventListener('input', () => speedValue.innerText = speedSlider.value + "x");
+pitchSlider.addEventListener('input', () => pitchValue.innerText = pitchSlider.value + "x");
 
 speakBtn.addEventListener('click', async () => {
   const text = textInput.value.trim();
