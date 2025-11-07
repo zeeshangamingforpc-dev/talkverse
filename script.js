@@ -1,149 +1,50 @@
-/* Dark theme with deep purples and oranges */
-body {
-  margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #1a0f2f;
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+const speakBtn = document.getElementById('speak-btn');
+const downloadBtn = document.getElementById('download-btn');
+const textInput = document.getElementById('text-input');
+const voiceSelect = document.getElementById('voice');
+const speedSlider = document.getElementById('speed');
+const speedValue = document.getElementById('speed-value');
+const pitchSlider = document.getElementById('pitch');
+const pitchValue = document.getElementById('pitch-value');
+const audio = document.getElementById('audio');
+const progress = document.getElementById('progress');
 
-.container {
-  background: #2a1b4d;
-  padding: 30px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
+speedSlider.addEventListener('input', () => {
+  speedValue.innerText = speedSlider.value + "x";
+});
 
-header h1 {
-  color: #fff;
-  margin-bottom: 20px;
-}
+pitchSlider.addEventListener('input', () => {
+  pitchValue.innerText = pitchSlider.value + "x";
+});
 
-h2 {
-  color: #fff;
-  margin-bottom: 15px;
-  font-size: 22px;
-}
+speakBtn.addEventListener('click', async () => {
+  const text = textInput.value.trim();
+  const voice = voiceSelect.value;
+  const speed = parseFloat(speedSlider.value);
+  const pitch = parseFloat(pitchSlider.value);
 
-textarea {
-  width: 100%;
-  height: 120px;
-  padding: 15px;
-  border-radius: 15px;
-  border: none;
-  resize: none;
-  font-size: 16px;
-  margin-bottom: 20px;
-  background: #3a2260;
-  color: #fff;
-}
+  if(!text) return alert("Enter text!");
 
-.controls {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-bottom: 20px;
-}
+  progress.style.display = "block";
+  audio.src = "";
+  downloadBtn.style.display = "none";
 
-.control-group {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+  try {
+    const response = await fetch('/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice, speed, pitch })
+    });
 
-label {
-  margin-bottom: 5px;
-  font-size: 14px;
-}
-
-input[type="range"] {
-  width: 100%;
-  accent-color: orange;
-}
-
-select {
-  padding: 8px;
-  border-radius: 10px;
-  border: none;
-  background: #3a2260;
-  color: #fff;
-}
-
-.buttons {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-button, #download-btn {
-  padding: 12px 20px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  text-decoration: none;
-  color: #fff;
-  transition: 0.3s;
-}
-
-button {
-  background: orange;
-}
-
-button:hover {
-  background: darkorange;
-}
-
-#download-btn {
-  background: #6a4bff;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-#download-btn:hover {
-  background: #8a6cff;
-}
-
-#progress {
-  width: 100%;
-  height: 15px;
-  background: #3a2260;
-  border-radius: 10px;
-  overflow: hidden;
-  display: none;
-  margin-bottom: 15px;
-  position: relative;
-}
-
-#progress span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: orange;
-  animation: loading 2s linear infinite;
-}
-
-audio {
-  width: 100%;
-  border-radius: 10px;
-  background: #3a2260;
-}
-
-footer {
-  margin-top: 20px;
-  font-size: 12px;
-  color: #b8aee0;
-}
-
-@keyframes loading {
-  0% { width: 0; }
-  50% { width: 100%; }
-  100% { width: 0; }
-}
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    audio.src = url;
+    downloadBtn.href = url;
+    downloadBtn.style.display = "inline-flex";
+    progress.style.display = "none";
+  } catch (err) {
+    console.error(err);
+    alert("Error generating voice");
+    progress.style.display = "none";
+  }
+});
