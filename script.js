@@ -1,34 +1,25 @@
+const textInput = document.getElementById('textInput');
+const speed = document.getElementById('speed');
+const pitch = document.getElementById('pitch');
+const generateBtn = document.getElementById('generateBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-let audioBlob = null; // store the generated audio
+const audioPlayer = document.getElementById('audioPlayer');
+let audioBlob = null;
 
 async function generateSpeech() {
     const text = textInput.value.trim();
-    if (!text) {
-        alert("Please enter some text!");
-        return;
-    }
+    if (!text) { alert("Please enter some text!"); return; }
 
     try {
-        const response = await fetch("https://api.openai.com/v1/audio/speech", {
+        const response = await fetch("http://localhost:3000/tts", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "gpt-4o-mini-tts",
-                voice: VOICE_ID,
-                input: text,
-                speed: parseFloat(speed.value),
-                pitch: parseFloat(pitch.value)
-            })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
 
-        audioBlob = await response.blob(); // save blob for download
+        audioBlob = await response.blob();
         const url = URL.createObjectURL(audioBlob);
         audioPlayer.src = url;
         audioPlayer.play();
@@ -38,13 +29,10 @@ async function generateSpeech() {
     }
 }
 
-// Download button functionality
-downloadBtn.addEventListener("click", () => {
-    if (!audioBlob) {
-        alert("Please generate audio first!");
-        return;
-    }
+generateBtn.addEventListener("click", generateSpeech);
 
+downloadBtn.addEventListener("click", () => {
+    if (!audioBlob) { alert("Please generate audio first!"); return; }
     const a = document.createElement("a");
     a.href = URL.createObjectURL(audioBlob);
     a.download = "TalkVerse_Audio.mp3";
@@ -52,5 +40,3 @@ downloadBtn.addEventListener("click", () => {
     a.click();
     document.body.removeChild(a);
 });
-
-generateBtn.addEventListener("click", generateSpeech);
