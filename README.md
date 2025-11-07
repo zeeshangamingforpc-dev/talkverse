@@ -1,26 +1,29 @@
 # TalkVerse - Text to Speech Website 🎙️
 
-TalkVerse is a modern, professional Text-to-Speech (TTS) web application that converts text into natural-sounding voice audio. It features a sleek dark glass interface and desktop-first design for a premium user experience.
+TalkVerse is a professional Text-to-Speech web app with a sleek dark-glass design. Convert text into natural-sounding speech with adjustable speed and pitch.
 
 Live Demo: [https://zeeshangamingforpc-dev.github.io/talkverse/](https://zeeshangamingforpc-dev.github.io/talkverse/)
 
 ---
 
-## 🌟 Features
-
-- **Text Input**: Enter any text to convert into speech.
-- **Voice Selection**: Choose from multiple voices (English male/female, etc.).
-- **Speed Control**: Adjust the speed of the generated speech.
-- **Pitch Control**: Modify the pitch for a more natural voice.
-- **Generate Voice Button**: Glowing, interactive button for instant audio generation.
-- **Audio Player**: Play your generated audio directly in the browser.
-- **Download Option**: Save the generated audio as an MP3 file.
+## Features
+- Enter text and convert to speech
+- Adjust voice speed and pitch
+- Play generated audio in-browser
+- **Download the generated audio** as MP3
+- Both buttons (Generate & Download) are same size for a clean UI
+- Footer at the bottom: *Created By Zeeshan*
 
 ---
 
-## 💻 Installation
+## Installation & Testing
+1. Download all files: `index.html`, `style.css`, `script.js`, `README.md`
+2. Open `index.html` in Chrome/Edge
+3. Enter text, adjust settings, and click **Generate Voice**
+4. Click **Download Audio** to save the generated speech
 
-1. Clone the repository or download the files:
+> ⚠️ For local testing only: your API key is exposed. For live deployment, use a secure backend or serverless function.
 
-   ```bash
-   git clone https://github.com/zeeshangamingforpc-dev/talkverse.git
+---
+
+**Created By Zeeshan**
