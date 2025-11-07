@@ -103,3 +103,8 @@ button:hover {
     textarea { height: 120px; }
     .controls { flex-direction: column; }
 }
+audio {
+    width: 100%;
+    margin-top: 15px;
+    display: none;
+}
