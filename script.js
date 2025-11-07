@@ -1,3 +1,4 @@
+// Grab DOM elements
 const textInput = document.getElementById("textInput");
 const voiceSelect = document.getElementById("voiceSelect");
 const generateBtn = document.getElementById("generateBtn");
@@ -10,9 +11,11 @@ const pitchVal = document.getElementById("pitchVal");
 const progressText = document.getElementById("progressText");
 const progressFill = document.getElementById("progressFill");
 
+// Update speed and pitch labels
 speedSlider.addEventListener("input", () => speedVal.textContent = speedSlider.value + "x");
 pitchSlider.addEventListener("input", () => pitchVal.textContent = pitchSlider.value + "x");
 
+// Generate Voice
 generateBtn.addEventListener("click", async () => {
   const text = textInput.value.trim();
   const voice = voiceSelect.value;
@@ -22,20 +25,23 @@ generateBtn.addEventListener("click", async () => {
   if (!text) return alert("Please enter some text!");
 
   try {
+    // Disable button & reset progress
     generateBtn.disabled = true;
     generateBtn.textContent = "Generating...";
     progressFill.style.width = "0%";
     progressText.textContent = "0%";
 
+    // Fake progress until real response comes
     let progress = 0;
     const interval = setInterval(() => {
       if (progress < 90) {
-        progress += Math.floor(Math.random()*5)+1;
+        progress += Math.floor(Math.random() * 5) + 1;
         progressFill.style.width = progress + "%";
         progressText.textContent = progress + "%";
       }
     }, 200);
 
+    // Send request to local backend
     const response = await fetch("http://localhost:3000/tts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -52,6 +58,7 @@ generateBtn.addEventListener("click", async () => {
     audioPlayer.src = URL.createObjectURL(blob);
     audioPlayer.play();
 
+    // Download button
     downloadBtn.onclick = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
