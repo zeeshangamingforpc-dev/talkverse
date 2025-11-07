@@ -1,57 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TalkVerse - Text to Speech</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
+# TalkVerse - Text to Speech
 
-<nav class="navbar">
-    <h1 class="logo">TalkVerse</h1>
-</nav>
+## How to Run
 
-<div class="container">
+1. Open terminal → go to backend folder:
+   cd backend
 
-    <h1 class="main-title">Text to Speech Converter 🎙️</h1>
+2. Install dependencies:
+   npm install express node-fetch cors dotenv
 
-    <textarea id="textInput" placeholder="Enter your text here..."></textarea>
+3. Run backend:
+   node index.js
 
-    <div class="controls">
-        <div class="control">
-            <label for="voiceSelect">Select Voice</label>
-            <select id="voiceSelect">
-                <option value="Eric" selected>Eric (Male)</option>
-                <option value="Allison">Allison (Female)</option>
-                <option value="Brian">Brian (Male)</option>
-            </select>
-        </div>
+4. Open index.html in browser → paste text → choose voice → set speed & pitch → generate → download.
 
-        <div class="control">
-            <label for="speed">Speed</label>
-            <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
-        </div>
+5. Make sure backend is running, otherwise speech generation won't work.
 
-        <div class="control">
-            <label for="pitch">Pitch</label>
-            <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
-        </div>
-    </div>
+## Voices
+- Eric (Male) → ErXwobaYiN019PkySvjV
+- Allison (Female) → MF3mGyEYCl7XYWbV9V6O
 
-    <div class="button-group">
-        <button id="generateBtn">🎤 Generate Voice</button>
-        <button id="downloadBtn">📥 Download Audio</button>
-    </div>
-
-    <audio id="audioPlayer" controls></audio>
-
-</div>
-
-<footer>
-    Created By Zeeshan
-</footer>
-
-<script src="script.js"></script>
-</body>
-</html>
+## Notes
+- Keep your API key private
+- For multiple devices, host backend online (Railway/Render) and update fetch URL
