@@ -1,45 +1,57 @@
-# TalkVerse - Text to Speech Website 🎙️
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TalkVerse - Text to Speech</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-TalkVerse is a professional Text-to-Speech web app with multiple voices and adjustable speed & pitch.
+<nav class="navbar">
+    <h1 class="logo">TalkVerse</h1>
+</nav>
 
-Live Demo: https://zeeshangamingforpc-dev.github.io/talkverse/
+<div class="container">
 
----
+    <h1 class="main-title">Text to Speech Converter 🎙️</h1>
 
-## Features
-- Choose voice (Male/Female/Custom)  
-- Enter text and convert to speech  
-- Adjust speed and pitch  
-- Play generated audio in-browser  
-- Download the generated audio as MP3  
-- Buttons same size, glowing effect  
-- Footer: Created By Zeeshan
+    <textarea id="textInput" placeholder="Enter your text here..."></textarea>
 
----
+    <div class="controls">
+        <div class="control">
+            <label for="voiceSelect">Select Voice</label>
+            <select id="voiceSelect">
+                <option value="Eric" selected>Eric (Male)</option>
+                <option value="Allison">Allison (Female)</option>
+                <option value="Brian">Brian (Male)</option>
+            </select>
+        </div>
 
-## Setup & Testing
+        <div class="control">
+            <label for="speed">Speed</label>
+            <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+        </div>
 
-### Backend
-1. Open terminal in `backend/`
-2. Create `.env` with your API key:
-\`\`\`
-OPENAI_API_KEY=your-api-key-here
-PORT=3000
-\`\`\`
-3. Run:
-\`\`\`
-npm install
-node index.js
-\`\`\`
-4. Backend runs on http://localhost:3000
+        <div class="control">
+            <label for="pitch">Pitch</label>
+            <input type="range" id="pitch" min="0" max="2" step="0.1" value="1">
+        </div>
+    </div>
 
-### Frontend
-1. Open `frontend/index.html` in Chrome or via local server.
-2. Enter text, select voice, adjust speed/pitch, click **Generate Voice**.
-3. Click **Download Audio** to save the speech.
+    <div class="button-group">
+        <button id="generateBtn">🎤 Generate Voice</button>
+        <button id="downloadBtn">📥 Download Audio</button>
+    </div>
 
-> ⚠️ For live deployment, update fetch URL in `script.js` to your hosted backend.
+    <audio id="audioPlayer" controls></audio>
 
----
+</div>
 
-**Created By Zeeshan**
+<footer>
+    Created By Zeeshan
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
