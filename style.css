@@ -1,6 +1,6 @@
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
 
-.navbar { width: 100%; padding: 25px 50px; background: #111; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3);}
+.navbar { width: 100%; padding: 25px 50px; background: #111; color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
 .logo { font-size: 36px; font-weight: bold; }
 
 .container { max-width: 1000px; margin: 50px auto; padding: 50px; background: rgba(30,30,30,0.85); border-radius: 20px; backdrop-filter: blur(10px); color: #fff; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
