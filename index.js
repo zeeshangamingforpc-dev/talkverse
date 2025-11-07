@@ -15,6 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.post("/tts", async (req, res) => {
     try {
         const { text, voice } = req.body;
+        if (!text || !voice) return res.status(400).send("Text or voice missing!");
+
         const response = await fetch("https://api.openai.com/v1/audio/speech", {
             method: "POST",
             headers: {
