@@ -8,35 +8,49 @@
 </head>
 <body>
 <nav class="navbar">
-    <h2 class="logo">TalkVerse</h2>
+<h2 class="logo">TalkVerse</h2>
 </nav>
 
 <div class="container">
-    <h1>Text to Speech Converter 🎙️</h1>
-    <textarea id="textInput" placeholder="Paste your text here..."></textarea>
+<h1>Text to Speech Converter 🎙️</h1>
 
-    <div class="controls">
-        <select id="voiceSelect">
-            <option value="ErXwobaYiN019PkySvjV">Eric (Male)</option>
-            <option value="MF3mGyEYCl7XYWbV9V6O">Allison (Female)</option>
-        </select>
-        <label>Speed: <span id="speedValue">1x</span></label>
-        <input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
-        <label>Pitch: <span id="pitchValue">1x</span></label>
-        <input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
-    </div>
+<textarea id="textInput" placeholder="Paste your text here..."></textarea>
 
-    <div class="buttons">
-        <button id="speakBtn">🎤 Generate Voice</button>
-        <button id="downloadBtn">📥 Download Audio</button>
-    </div>
-
-    <audio id="audioPlayer" controls></audio>
+<div class="controls">
+<div class="control-group">
+<label for="voiceSelect">Select Voice</label>
+<select id="voiceSelect">
+<option value="ErXwobaYiN019PkySvjV">Eric (Male)</option>
+<option value="MF3mGyEYCl7XYWbV9V6O">Allison (Female)</option>
+</select>
 </div>
 
-<footer>
-    Created by Zeeshan
-</footer>
+<div class="control-group">
+<label for="speed">Speed: <span id="speedVal">1x</span></label>
+<input type="range" id="speed" min="0.5" max="2" step="0.1" value="1">
+</div>
+
+<div class="control-group">
+<label for="pitch">Pitch: <span id="pitchVal">1x</span></label>
+<input type="range" id="pitch" min="0.5" max="2" step="0.1" value="1">
+</div>
+
+<div class="control-group">
+<button id="generateBtn">🎤 Generate Voice</button>
+<button id="downloadBtn">📥 Download Audio</button>
+</div>
+
+<div class="progress-container">
+<label>Generating Voice: <span id="progressText">0%</span></label>
+<div id="progressBar">
+<div id="progressFill"></div>
+</div>
+</div>
+
+<audio id="audioPlayer" controls></audio>
+
+<p class="footer">Created By Zeeshan</p>
+</div>
 
 <script src="script.js"></script>
 </body>
