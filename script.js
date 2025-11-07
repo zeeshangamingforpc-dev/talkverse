@@ -10,7 +10,9 @@ let audioBlob = null;
 async function generateSpeech() {
     const text = textInput.value.trim();
     const voice = voiceSelect.value;
+
     if (!text) { alert("Please enter some text!"); return; }
+    if (!voice) { alert("Please select a voice!"); return; }
 
     try {
         const response = await fetch("http://localhost:3000/tts", {
@@ -19,7 +21,7 @@ async function generateSpeech() {
             body: JSON.stringify({ text, voice })
         });
 
-        if (!response.ok) { throw new Error(`HTTP error! Status: ${response.status}`); }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         audioBlob = await response.blob();
         const url = URL.createObjectURL(audioBlob);
