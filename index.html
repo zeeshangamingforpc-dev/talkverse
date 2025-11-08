@@ -3,112 +3,497 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - Professional Text to Speech</title>
-    <link rel="stylesheet" href="style.css">
+    <title>TalkVerse - Advanced Text to Speech Converter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            color: #666;
+            transition: all 0.3s;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 150px;
+            transition: border 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .char-count {
+            text-align: right;
+            color: #999;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .control-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        select, input[type="range"] {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: border 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            padding: 0;
+        }
+
+        .range-value {
+            text-align: center;
+            margin-top: 5px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(17, 153, 142, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .progress-container {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .audio-player {
+            display: none;
+            margin: 25px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            animation: slideIn 0.5s ease;
+        }
+
+        audio {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .history-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .history-item:hover {
+            background: #e8e8e8;
+            transform: translateX(5px);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .history-text {
+            color: #333;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .history-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.85em;
+            color: #999;
+        }
+
+        .history-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.85em;
+            min-width: auto;
+            flex: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.success {
+            background: #38ef7d;
+        }
+
+        .toast.error {
+            background: #ff6b6b;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75em;
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
             <h1>🎙️ TalkVerse</h1>
-            <p>Professional AI-Powered Text to Speech with ElevenLabs</p>
+            <p>Professional Text to Speech Converter with Advanced Features</p>
         </div>
 
-        <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('convert')">
-                <span class="tab-icon">🎯</span>
-                <span>Convert</span>
-            </button>
-            <button class="tab" onclick="switchTab('voices')">
-                <span class="tab-icon">🗣️</span>
-                <span>Voices</span>
-            </button>
-            <button class="tab" onclick="switchTab('history')">
-                <span class="tab-icon">📜</span>
-                <span>History</span>
-            </button>
-            <button class="tab" onclick="switchTab('settings')">
-                <span class="tab-icon">⚙️</span>
-                <span>Settings</span>
-            </button>
+            <button class="tab active" onclick="switchTab('convert')">🎯 Convert</button>
+            <button class="tab" onclick="switchTab('history')">📜 History</button>
+            <button class="tab" onclick="switchTab('settings')">⚙️ Settings</button>
         </div>
 
         <!-- Convert Tab -->
         <div id="convert" class="tab-content active">
             <div class="input-group">
-                <label for="textInput">
-                    Enter Your Text 
-                    <span class="feature-badge">Max 5000 chars</span>
-                </label>
-                <textarea 
-                    id="textInput" 
-                    placeholder="Type or paste your text here... 
-
-Example:
-Hello! Welcome to TalkVerse. This is a professional text-to-speech converter powered by ElevenLabs AI. You can convert any text into natural-sounding speech with multiple voice options!"
-                    maxlength="5000"
-                ></textarea>
+                <label>Enter Your Text <span class="feature-badge">Max 5000 chars</span></label>
+                <textarea id="textInput" placeholder="Type or paste your text here... You can write anything - stories, articles, notes, or any content you want to hear!"></textarea>
                 <div class="char-count">
                     <span id="charCount">0</span> / 5000 characters
                 </div>
             </div>
 
-            <!-- Voice Selection -->
             <div class="controls-grid">
                 <div class="control-item">
-                    <label for="voiceSelect">🗣️ Select Voice</label>
+                    <label>🗣️ Voice</label>
                     <select id="voiceSelect">
-                        <option value="gP8LZQ3GGokV0MP5JYjg">Rachel - Female (Default)</option>
-                        <option value="21m00Tcm4TlvDq8ikWAM">Antoni - Male</option>
-                        <option value="AZnzlk1XvdvUeBnXmlld">Domi - Female</option>
-                        <option value="EXAVITQu4vr4xnSDxMaL">Bella - Female</option>
-                        <option value="ErXwobaYiN019PkySvjV">Josh - Male</option>
-                        <option value="MF3mGyEYCl7XYWbV9V6O">Elli - Female</option>
-                        <option value="TxGEqnHWrfWFTfGW9XjX">Sam - Male</option>
-                        <option value="VR6AewLTigWG4xSOukaG">Arnold - Male</option>
-                        <option value="pNInz6obpgDQGcFmaJgB">Adam - Male</option>
-                        <option value="yoZ06aMxZJJ28mfd3POQ">Dave - Male</option>
+                        <option value="">Loading voices...</option>
                     </select>
                 </div>
 
                 <div class="control-item">
-                    <label>🎚️ Stability: <span class="range-value" id="stabilityValue">0.5</span></label>
-                    <input type="range" id="stabilityControl" min="0" max="1" step="0.1" value="0.5">
-                    <small>Higher = More consistent</small>
+                    <label>🎚️ Speed: <span class="range-value" id="speedValue">1.0x</span></label>
+                    <input type="range" id="speedControl" min="0.5" max="2" step="0.1" value="1">
                 </div>
 
                 <div class="control-item">
-                    <label>🎨 Similarity: <span class="range-value" id="similarityValue">0.75</span></label>
-                    <input type="range" id="similarityControl" min="0" max="1" step="0.1" value="0.75">
-                    <small>Higher = More accurate to voice</small>
+                    <label>🔊 Pitch: <span class="range-value" id="pitchValue">1.0</span></label>
+                    <input type="range" id="pitchControl" min="0.5" max="2" step="0.1" value="1">
                 </div>
 
                 <div class="control-item">
-                    <label>⚡ Style: <span class="range-value" id="styleValue">0.0</span></label>
-                    <input type="range" id="styleControl" min="0" max="1" step="0.1" value="0">
-                    <small>Higher = More expressive</small>
+                    <label>📢 Volume: <span class="range-value" id="volumeValue">100%</span></label>
+                    <input type="range" id="volumeControl" min="0" max="100" step="5" value="100">
                 </div>
             </div>
 
-            <!-- Progress Bar -->
             <div class="progress-container" id="progressContainer">
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
-                <div class="progress-text" id="progressText">Ready to convert...</div>
+                <div class="progress-text" id="progressText">Generating Voice: 0%</div>
             </div>
 
-            <!-- Audio Player -->
             <div class="audio-player" id="audioPlayer">
-                <div class="audio-info">
-                    <span class="audio-title">🎵 Generated Audio</span>
-                    <span class="audio-duration" id="audioDuration">0:00</span>
-                </div>
                 <audio id="audioElement" controls></audio>
-                <div class="audio-actions">
+                <div class="buttons">
                     <button class="btn-success" onclick="downloadAudio()">
-                        💾 Download MP3
+                        💾 Download Audio
                     </button>
                     <button class="btn-secondary btn-small" onclick="shareAudio()">
                         🔗 Share
@@ -116,80 +501,53 @@ Hello! Welcome to TalkVerse. This is a professional text-to-speech converter pow
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="buttons">
-                <button class="btn-primary" onclick="convertText()" id="convertBtn">
-                    <span class="btn-icon">🎤</span>
-                    <span>Convert to Speech</span>
+                <button class="btn-primary" onclick="convertText()">
+                    🎤 Convert to Speech
+                </button>
+                <button class="btn-secondary" onclick="pauseResume()" id="pauseBtn" style="display: none;">
+                    ⏸️ Pause
+                </button>
+                <button class="btn-secondary" onclick="stopSpeech()">
+                    ⏹️ Stop
                 </button>
                 <button class="btn-secondary" onclick="clearText()">
-                    <span class="btn-icon">🗑️</span>
-                    <span>Clear</span>
+                    🗑️ Clear
                 </button>
-            </div>
-
-            <!-- Quick Tips -->
-            <div class="tips">
-                <h4>💡 Quick Tips:</h4>
-                <ul>
-                    <li>Use punctuation for natural pauses and intonation</li>
-                    <li>Try different voices to find your favorite</li>
-                    <li>Adjust stability for consistent or varied delivery</li>
-                    <li>Press Ctrl+Enter to quickly convert</li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Voices Tab -->
-        <div id="voices" class="tab-content">
-            <h3>🗣️ Available Voice Library</h3>
-            <p class="subtitle">Choose from our collection of professional AI voices</p>
-            
-            <div class="voice-grid" id="voiceGrid">
-                <!-- Voices will be loaded here by JavaScript -->
             </div>
         </div>
 
         <!-- History Tab -->
         <div id="history" class="tab-content">
-            <!-- Stats Cards -->
             <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-icon">📊</div>
                     <div class="stat-number" id="totalConversions">0</div>
                     <div class="stat-label">Total Conversions</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">📝</div>
                     <div class="stat-number" id="totalChars">0</div>
                     <div class="stat-label">Characters Processed</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-icon">🎙️</div>
                     <div class="stat-number" id="favoriteVoice">-</div>
                     <div class="stat-label">Most Used Voice</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-number" id="totalTime">0s</div>
-                    <div class="stat-label">Total Audio Time</div>
-                </div>
             </div>
 
-            <!-- History Actions -->
-            <div class="buttons history-actions">
+            <div class="buttons" style="margin-bottom: 20px;">
                 <button class="btn-secondary btn-small" onclick="clearHistory()">
                     🗑️ Clear All History
                 </button>
                 <button class="btn-secondary btn-small" onclick="exportHistory()">
-                    📥 Export JSON
+                    📥 Export History
                 </button>
             </div>
 
-            <!-- History List -->
             <div class="history-container" id="historyContainer">
                 <div class="empty-state">
-                    <div class="empty-icon">📭</div>
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
                     <h3>No history yet!</h3>
                     <p>Your converted texts will appear here</p>
                 </div>
@@ -198,90 +556,376 @@ Hello! Welcome to TalkVerse. This is a professional text-to-speech converter pow
 
         <!-- Settings Tab -->
         <div id="settings" class="tab-content">
-            <h3>⚙️ Application Settings</h3>
-            
-            <div class="settings-section">
-                <h4>🎨 Appearance</h4>
-                <div class="input-group">
-                    <label for="themeSelect">Theme</label>
-                    <select id="themeSelect" onchange="changeTheme()">
-                        <option value="purple">Purple Gradient (Default)</option>
-                        <option value="blue">Ocean Blue</option>
-                        <option value="green">Forest Green</option>
-                        <option value="orange">Sunset Orange</option>
-                        <option value="dark">Dark Mode</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="textSizeSelect">Text Size</label>
-                    <select id="textSizeSelect" onchange="changeTextSize()">
-                        <option value="small">Small</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="large">Large</option>
-                        <option value="xlarge">Extra Large</option>
-                    </select>
-                </div>
+            <div class="input-group">
+                <label>🎨 Theme</label>
+                <select id="themeSelect" onchange="changeTheme()">
+                    <option value="purple">Purple Gradient (Default)</option>
+                    <option value="blue">Ocean Blue</option>
+                    <option value="green">Forest Green</option>
+                    <option value="orange">Sunset Orange</option>
+                </select>
             </div>
 
-            <div class="settings-section">
-                <h4>🔧 Functionality</h4>
-                <div class="input-group">
-                    <label for="autoPlaySelect">Auto-play after conversion</label>
-                    <select id="autoPlaySelect">
-                        <option value="true">Enabled</option>
-                        <option value="false" selected>Disabled</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="saveHistorySelect">Save conversion history</label>
-                    <select id="saveHistorySelect">
-                        <option value="true" selected>Enabled</option>
-                        <option value="false">Disabled</option>
-                    </select>
-                </div>
-
-                <div class="input-group">
-                    <label for="autoDownloadSelect">Auto-download generated audio</label>
-                    <select id="autoDownloadSelect">
-                        <option value="true">Enabled</option>
-                        <option value="false" selected>Disabled</option>
-                    </select>
-                </div>
+            <div class="input-group">
+                <label>🔤 Text Size</label>
+                <select id="textSizeSelect" onchange="changeTextSize()">
+                    <option value="small">Small</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="large">Large</option>
+                </select>
             </div>
 
-            <div class="settings-section">
-                <h4>🔑 API Configuration</h4>
-                <div class="input-group">
-                    <label for="apiKeyInput">ElevenLabs API Key (Optional - Leave default for demo)</label>
-                    <input type="password" id="apiKeyInput" placeholder="Your API key here">
-                    <small>Your API key is stored locally and never sent to any server except ElevenLabs</small>
-                </div>
+            <div class="input-group">
+                <label>⚡ Auto-play after conversion</label>
+                <select id="autoPlaySelect">
+                    <option value="true">Enabled</option>
+                    <option value="false">Disabled</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>💾 Save history</label>
+                <select id="saveHistorySelect">
+                    <option value="true">Enabled</option>
+                    <option value="false">Disabled</option>
+                </select>
             </div>
 
             <button class="btn-primary" onclick="saveSettings()">
-                💾 Save All Settings
+                💾 Save Settings
             </button>
-
-            <div class="settings-info">
-                <h4>ℹ️ About TalkVerse</h4>
-                <p>Version: 2.0.0</p>
-                <p>Powered by: ElevenLabs AI</p>
-                <p>Created with ❤️ for professional text-to-speech conversion</p>
-            </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="loading-overlay">
-        <div class="loading-spinner"></div>
-        <p>Converting your text...</p>
-    </div>
+    <script>
+        // Global variables
+        let voices = [];
+        let currentUtterance = null;
+        let isPaused = false;
+        let history = JSON.parse(localStorage.getItem('ttsHistory')) || [];
+        let settings = JSON.parse(localStorage.getItem('ttsSettings')) || {
+            theme: 'purple',
+            textSize: 'medium',
+            autoPlay: false,
+            saveHistory: true
+        };
 
-    <script src="script.js"></script>
-</body>
-</html>
+        // Initialize
+        window.onload = function() {
+            loadVoices();
+            loadSettings();
+            updateHistory();
+            updateStats();
+            initializeEventListeners();
+        };
+
+        function initializeEventListeners() {
+            const textInput = document.getElementById('textInput');
+            const speedControl = document.getElementById('speedControl');
+            const pitchControl = document.getElementById('pitchControl');
+            const volumeControl = document.getElementById('volumeControl');
+
+            textInput.addEventListener('input', updateCharCount);
+            speedControl.addEventListener('input', () => {
+                document.getElementById('speedValue').textContent = speedControl.value + 'x';
+            });
+            pitchControl.addEventListener('input', () => {
+                document.getElementById('pitchValue').textContent = pitchControl.value;
+            });
+            volumeControl.addEventListener('input', () => {
+                document.getElementById('volumeValue').textContent = volumeControl.value + '%';
+            });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    convertText();
+                }
+                if (e.ctrlKey && e.key === 'k') {
+                    clearText();
+                }
+            });
+        }
+
+        function loadVoices() {
+            voices = speechSynthesis.getVoices();
+            const voiceSelect = document.getElementById('voiceSelect');
+            
+            if (voices.length > 0) {
+                voiceSelect.innerHTML = '';
+                voices.forEach((voice, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    if (voice.default) {
+                        option.selected = true;
+                    }
+                    voiceSelect.appendChild(option);
+                });
+            }
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function updateCharCount() {
+            const text = document.getElementById('textInput').value;
+            document.getElementById('charCount').textContent = text.length;
+            
+            if (text.length > 5000) {
+                document.getElementById('textInput').value = text.substring(0, 5000);
+                showToast('Maximum 5000 characters allowed!', 'error');
+            }
+        }
+
+        function convertText() {
+            const text = document.getElementById('textInput').value.trim();
+            
+            if (!text) {
+                showToast('Please enter some text!', 'error');
+                return;
+            }
+
+            if (text.length > 5000) {
+                showToast('Text is too long! Maximum 5000 characters.', 'error');
+                return;
+            }
+
+            // Stop any ongoing speech
+            speechSynthesis.cancel();
+
+            // Show progress
+            showProgress();
+
+            // Create utterance
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            
+            // Apply settings
+            const voiceIndex = document.getElementById('voiceSelect').value;
+            currentUtterance.voice = voices[voiceIndex];
+            currentUtterance.rate = parseFloat(document.getElementById('speedControl').value);
+            currentUtterance.pitch = parseFloat(document.getElementById('pitchControl').value);
+            currentUtterance.volume = parseFloat(document.getElementById('volumeControl').value) / 100;
+
+            // Event handlers
+            currentUtterance.onstart = () => {
+                document.getElementById('pauseBtn').style.display = 'block';
+                updateProgress(10);
+            };
+
+            currentUtterance.onboundary = (event) => {
+                const progress = (event.charIndex / text.length) * 100;
+                updateProgress(Math.min(progress, 90));
+            };
+
+            currentUtterance.onend = () => {
+                updateProgress(100);
+                setTimeout(() => {
+                    hideProgress();
+                    showAudioPlayer();
+                    document.getElementById('pauseBtn').style.display = 'none';
+                }, 500);
+
+                // Save to history
+                if (settings.saveHistory) {
+                    saveToHistory(text, voiceIndex);
+                }
+
+                showToast('Conversion completed!', 'success');
+            };
+
+            currentUtterance.onerror = (event) => {
+                hideProgress();
+                showToast('Error: ' + event.error, 'error');
+            };
+
+            // Start speaking
+            speechSynthesis.speak(currentUtterance);
+        }
+
+        function showProgress() {
+            document.getElementById('progressContainer').style.display = 'block';
+            updateProgress(0);
+        }
+
+        function hideProgress() {
+            document.getElementById('progressContainer').style.display = 'none';
+        }
+
+        function updateProgress(percent) {
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = `Generating Voice: ${Math.round(percent)}%`;
+        }
+
+        function showAudioPlayer() {
+            // Note: Browser speech synthesis doesn't provide audio file
+            // This is a visual indicator only
+            document.getElementById('audioPlayer').style.display = 'block';
+            showToast('Audio is playing through browser speech synthesis', 'success');
+        }
+
+        function pauseResume() {
+            if (isPaused) {
+                speechSynthesis.resume();
+                document.getElementById('pauseBtn').innerHTML = '⏸️ Pause';
+                isPaused = false;
+            } else {
+                speechSynthesis.pause();
+                document.getElementById('pauseBtn').innerHTML = '▶️ Resume';
+                isPaused = true;
+            }
+        }
+
+        function stopSpeech() {
+            speechSynthesis.cancel();
+            hideProgress();
+            document.getElementById('audioPlayer').style.display = 'none';
+            document.getElementById('pauseBtn').style.display = 'none';
+            isPaused = false;
+        }
+
+        function clearText() {
+            document.getElementById('textInput').value = '';
+            updateCharCount();
+            stopSpeech();
+        }
+
+        function downloadAudio() {
+            showToast('Browser speech synthesis cannot be downloaded directly. Consider using Web Audio API for this feature.', 'error');
+        }
+
+        function shareAudio() {
+            const text = document.getElementById('textInput').value;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'TalkVerse Text',
+                    text: text,
+                }).then(() => {
+                    showToast('Shared successfully!', 'success');
+                }).catch(() => {
+                    showToast('Share cancelled', 'error');
+                });
+            } else {
+                navigator.clipboard.writeText(text);
+                showToast('Text copied to clipboard!', 'success');
+            }
+        }
+
+        function saveToHistory(text, voiceIndex) {
+            const entry = {
+                id: Date.now(),
+                text: text,
+                voice: voices[voiceIndex].name,
+                speed: document.getElementById('speedControl').value,
+                pitch: document.getElementById('pitchControl').value,
+                timestamp: new Date().toLocaleString(),
+                charCount: text.length
+            };
+
+            history.unshift(entry);
+            if (history.length > 50) {
+                history = history.slice(0, 50);
+            }
+
+            localStorage.setItem('ttsHistory', JSON.stringify(history));
+            updateHistory();
+            updateStats();
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('historyContainer');
+            
+            if (history.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                        </svg>
+                        <h3>No history yet!</h3>
+                        <p>Your converted texts will appear here</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = history.map(entry => `
+                <div class="history-item">
+                    <div class="history-header">
+                        <strong>🗣️ ${entry.voice}</strong>
+                        <div class="history-actions">
+                            <button class="btn-secondary btn-small" onclick="replayHistory(${entry.id})">
+                                🔄 Replay
+                            </button>
+                            <button class="btn-secondary btn-small" onclick="deleteHistory(${entry.id})">
+                                🗑️ Delete
+                            </button>
+                        </div>
+                    </div>
+                    <div class="history-text">${entry.text}</div>
+                    <div class="history-meta">
+                        <span>📅 ${entry.timestamp}</span>
+                        <span>📊 ${entry.charCount} chars</span>
+                        <span>⚡ ${entry.speed}x speed</span>
+                        <span>🎚️ ${entry.pitch} pitch</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalConversions').textContent = history.length;
+            
+            const totalChars = history.reduce((sum, entry) => sum + entry.charCount, 0);
+            document.getElementById('totalChars').textContent = totalChars.toLocaleString();
+
+            // Find most used voice
+            const voiceCounts = {};
+            history.forEach(entry => {
+                voiceCounts[entry.voice] = (voiceCounts[entry.voice] || 0) + 1;
+            });
+            
+            const mostUsed = Object.keys(voiceCounts).reduce((a, b) => 
+                voiceCounts[a] > voiceCounts[b] ? a : b, '-'
+            );
+            
+            document.getElementById('favoriteVoice').textContent = mostUsed.split(' ')[0] || '-';
+        }
+
+        function replayHistory(id) {
+            const entry = history.find(h => h.id === id);
+            if (entry) {
+                document.getElementById('textInput').value = entry.text;
+                updateCharCount();
+                switchTab('convert');
+                setTimeout(() => convertText(), 100);
+            }
+        }
+
+        function deleteHistory(id) {
+            history = history.filter(h => h.id !== id);
+            localStorage.setItem('ttsHistory', JSON.stringify(history));
+            updateHistory();
+            updateStats();
+            showToast('Deleted from history', 'success');
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear all history?')) {
+                history = [];
+                localStorage.setItem('ttsHistory', JSON.stringify(history));
+                updateHistory();
+                updateStats();
+                showToast('History cleared!', 'success');
+            }
+        }
+
+        function exportHistory() {
+            const dataStr = JSON.stringify(history, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'talkverse_history.json';
