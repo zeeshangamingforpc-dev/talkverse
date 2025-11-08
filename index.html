@@ -3,190 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - AI Text to Speech</title>
-    <!-- Link your CSS -->
-    <link rel="stylesheet" href="style.css">
+    <title>TalkVerse - AI Voice Platform</title>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="theme-purple text-medium">
-
+<body>
     <div class="container">
-
-        <!-- Header -->
         <div class="header">
-            <h1>TalkVerse 🎙️</h1>
-            <p>Convert text into lifelike speech with AI voices</p>
+            <h1>TalkVerse</h1>
+            <p>Create AI-generated voices instantly</p>
         </div>
-
-        <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('convert')"><span class="tab-icon">📝</span> Convert</button>
-            <button class="tab" onclick="switchTab('voices')"><span class="tab-icon">🎤</span> Voices</button>
-            <button class="tab" onclick="switchTab('history')"><span class="tab-icon">📜</span> History</button>
-            <button class="tab" onclick="switchTab('settings')"><span class="tab-icon">⚙️</span> Settings</button>
+            <button class="tab active">Dashboard</button>
+            <button class="tab">History</button>
+            <button class="tab">Settings</button>
         </div>
 
-        <!-- Tab Contents -->
-        <div id="convert" class="tab-content active">
-            <!-- Text Input -->
-            <div class="input-group">
-                <label for="textInput">Enter text to convert:</label>
-                <textarea id="textInput" placeholder="Type something..."></textarea>
-                <div class="char-count" id="charCount">0</div>
-            </div>
-
-            <!-- Controls -->
-            <div class="controls-grid">
-                <div class="control-item">
-                    <label for="stabilityControl">Stability</label>
-                    <input type="range" id="stabilityControl" min="0" max="1" step="0.01" value="0.5">
-                    <div class="range-value" id="stabilityValue">0.5</div>
-                </div>
-                <div class="control-item">
-                    <label for="similarityControl">Similarity</label>
-                    <input type="range" id="similarityControl" min="0" max="1" step="0.01" value="0.5">
-                    <div class="range-value" id="similarityValue">0.5</div>
-                </div>
-                <div class="control-item">
-                    <label for="styleControl">Style</label>
-                    <input type="range" id="styleControl" min="0" max="1" step="0.01" value="0">
-                    <div class="range-value" id="styleValue">0</div>
-                </div>
-            </div>
-
-            <!-- Buttons -->
-            <div class="buttons">
-                <button class="btn-primary" onclick="convertText()">Convert</button>
-                <button class="btn-secondary" onclick="clearText()">Clear</button>
-                <button class="btn-success" onclick="downloadAudio()">Download</button>
-            </div>
-
-            <!-- Progress -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <div class="progress-text" id="progressText">0%</div>
-            </div>
-
-            <!-- Audio Player -->
-            <div class="audio-player" id="audioPlayer">
-                <div class="audio-info">
-                    <div class="audio-title">Audio Preview</div>
-                    <div class="audio-duration" id="audioDuration">0:00</div>
-                </div>
-                <audio id="audioElement" controls></audio>
-                <div class="audio-actions">
-                    <button class="btn-secondary" onclick="downloadAudio()">💾 Download</button>
-                    <button class="btn-secondary" onclick="shareAudio()">🔗 Share</button>
-                </div>
-            </div>
+        <div class="tab-content active">
+            <h2>Welcome to TalkVerse</h2>
+            <p>Select a voice and enter text to generate speech.</p>
+            <a href="dashboard.html">
+                <button class="btn-primary">Go to Dashboard</button>
+            </a>
         </div>
 
-        <!-- Voices Tab -->
-        <div id="voices" class="tab-content">
-            <div class="voice-grid" id="voiceGrid"></div>
+        <div class="tab-content">
+            <p>History will be shown here.</p>
         </div>
 
-        <!-- History Tab -->
-        <div id="history" class="tab-content">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-icon">🗣️</div>
-                    <div class="stat-number" id="totalConversions">0</div>
-                    <div class="stat-label">Total Conversions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">📝</div>
-                    <div class="stat-number" id="totalChars">0</div>
-                    <div class="stat-label">Characters</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">🎤</div>
-                    <div class="stat-number" id="favoriteVoice">-</div>
-                    <div class="stat-label">Most Used Voice</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-number" id="totalTime">0s</div>
-                    <div class="stat-label">Estimated Time</div>
-                </div>
-            </div>
-            <div class="history-container" id="historyContainer"></div>
-            <div class="buttons">
-                <button class="btn-secondary" onclick="clearHistory()">Clear All</button>
-                <button class="btn-success" onclick="exportHistory()">Export JSON</button>
-            </div>
+        <div class="tab-content">
+            <p>Settings page.</p>
         </div>
-
-        <!-- Settings Tab -->
-        <div id="settings" class="tab-content">
-            <div class="settings-section">
-                <h4>Theme & Text Size</h4>
-                <div class="input-group">
-                    <label for="themeSelect">Theme:</label>
-                    <select id="themeSelect" onchange="changeTheme()">
-                        <option value="purple">Purple</option>
-                        <option value="blue">Blue</option>
-                        <option value="green">Green</option>
-                        <option value="orange">Orange</option>
-                        <option value="dark">Dark</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="textSizeSelect">Text Size:</label>
-                    <select id="textSizeSelect" onchange="changeTextSize()">
-                        <option value="small">Small</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="large">Large</option>
-                        <option value="xlarge">XLarge</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="settings-section">
-                <h4>Other Settings</h4>
-                <div class="input-group">
-                    <label for="autoPlaySelect">Auto Play:</label>
-                    <select id="autoPlaySelect">
-                        <option value="true">Yes</option>
-                        <option value="false" selected>No</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="saveHistorySelect">Save History:</label>
-                    <select id="saveHistorySelect">
-                        <option value="true" selected>Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="autoDownloadSelect">Auto Download:</label>
-                    <select id="autoDownloadSelect">
-                        <option value="true">Yes</option>
-                        <option value="false" selected>No</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label for="apiKeyInput">API Key:</label>
-                    <input type="password" id="apiKeyInput" placeholder="Enter your ElevenLabs API key">
-                </div>
-                <button class="btn-success" onclick="saveSettings()">Save Settings</button>
-            </div>
-        </div>
-
     </div>
-
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>Processing...</p>
-    </div>
-
-    <!-- Link your JS -->
-    <script src="script.js"></script>
-
+    <script src="assets/js/script.js"></script>
 </body>
 </html>
