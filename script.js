@@ -1,118 +1,126 @@
-// ================================
-// TalkVerse JS - script.js
-// ================================
+/* ========================================
+   TalkVerse - Main JS
+   ======================================== */
 
-// Tabs
-function switchTab(tabId) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    document.querySelector(`.tab[onclick*="${tabId}"]`).classList.add('active');
-    document.getElementById(tabId).classList.add('active');
-}
+const ELEVEN_API_KEY = "caa2a3dbd47191bb239ca76b11412c740ba9db14ee90ad2963a2b38d8a61e295";
+const VOICE_ID = "gP8LZQ3GGokV0MP5JYjg"; // Eric's voice
 
-// Character count
-const textInput = document.getElementById('textInput');
-const charCount = document.getElementById('charCount');
-textInput?.addEventListener('input', () => {
-    charCount.textContent = textInput.value.length;
-});
+document.addEventListener("DOMContentLoaded", () => {
+  /* -------------------------------
+     Tabs
+  ------------------------------- */
+  const tabs = document.querySelectorAll(".tab");
+  const tabContents = document.querySelectorAll(".tab-content");
 
-// Range controls
-const stabilityControl = document.getElementById('stabilityControl');
-const similarityControl = document.getElementById('similarityControl');
-const styleControl = document.getElementById('styleControl');
-const stabilityValue = document.getElementById('stabilityValue');
-const similarityValue = document.getElementById('similarityValue');
-const styleValue = document.getElementById('styleValue');
-
-stabilityControl?.addEventListener('input', () => stabilityValue.textContent = stabilityControl.value);
-similarityControl?.addEventListener('input', () => similarityValue.textContent = similarityControl.value);
-styleControl?.addEventListener('input', () => styleValue.textContent = styleControl.value);
-
-// Placeholder TTS functions
-function convertText() {
-    showToast("Converting text...");
-    document.getElementById('progressContainer').style.display = "block";
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 10;
-        document.getElementById('progressFill').style.width = progress + "%";
-        document.getElementById('progressText').textContent = progress + "%";
-        if(progress >= 100) {
-            clearInterval(interval);
-            document.getElementById('audioPlayer').style.display = "block";
-            showToast("Conversion completed!", "success");
-        }
-    }, 200);
-}
-
-function clearText() {
-    textInput.value = "";
-    charCount.textContent = "0";
-}
-
-function downloadAudio() {
-    showToast("Downloading audio...", "success");
-}
-
-function shareAudio() {
-    showToast("Share link copied!", "success");
-}
-
-// Toast Notification
-function showToast(message, type="error") {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast ${type}`;
-    toast.style.display = "block";
-    setTimeout(() => toast.style.display = "none", 3000);
-}
-
-// Settings
-function changeTheme() {
-    const theme = document.getElementById('themeSelect').value;
-    document.body.className = `theme-${theme}`;
-}
-
-function changeTextSize() {
-    const size = document.getElementById('textSizeSelect').value;
-    document.body.classList.remove('text-small', 'text-medium', 'text-large', 'text-xlarge');
-    document.body.classList.add(`text-${size}`);
-}
-
-function saveSettings() {
-    showToast("Settings saved!", "success");
-}
-
-// History
-function clearHistory() {
-    document.getElementById('historyContainer').innerHTML = "";
-    showToast("History cleared!", "success");
-}
-
-function exportHistory() {
-    showToast("History exported!", "success");
-}
-
-// Initialize voice grid with dummy data
-const voices = [
-    {name:"Alice", description:"Friendly voice"},
-    {name:"Bob", description:"Deep voice"},
-    {name:"Charlie", description:"Calm voice"},
-];
-
-const voiceGrid = document.getElementById('voiceGrid');
-voices.forEach(v => {
-    const card = document.createElement('div');
-    card.className = "voice-card";
-    card.innerHTML = `<div class="voice-header">
-        <div class="voice-avatar">${v.name[0]}</div>
-        <div class="voice-name">${v.name}</div>
-    </div>
-    <div class="voice-description">${v.description}</div>`;
-    card.addEventListener('click', () => {
-        document.querySelectorAll('.voice-card').forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tabContents.forEach(tc => tc.classList.remove("active"));
+      tab.classList.add("active");
+      tabContents[index].classList.add("active");
     });
-    voiceGrid.appendChild(card);
+  });
+
+  /* -------------------------------
+     Voice Cards Selection
+  ------------------------------- */
+  const voiceCards = document.querySelectorAll(".voice-card");
+  let selectedVoice = VOICE_ID;
+
+  voiceCards.forEach(card => {
+    card.addEventListener("click", () => {
+      voiceCards.forEach(c => c.classList.remove("selected"));
+      card.classList.add("selected");
+      selectedVoice = card.dataset.voiceId || VOICE_ID;
+    });
+  });
+
+  /* -------------------------------
+     Generate TTS
+  ------------------------------- */
+  const generateBtn = document.querySelector("#generate-btn");
+  const inputText = document.querySelector("#text-input");
+  const audioContainer = document.querySelector(".audio-player");
+  const audioElement = audioContainer.querySelector("audio");
+  const progressContainer = document.querySelector(".progress-container");
+  const progressBar = document.querySelector(".progress-fill");
+  const progressText = document.querySelector(".progress-text");
+
+  generateBtn.addEventListener("click", async () => {
+    const text = inputText.value.trim();
+    if (!text) return showToast("Please enter some text!", "error");
+
+    // Show loading
+    progressContainer.style.display = "block";
+    progressBar.style.width = "0%";
+    progressText.textContent = "Starting...";
+
+    try {
+      const audioBlob = await fetchTTS(text, selectedVoice);
+      const audioUrl = URL.createObjectURL(audioBlob);
+      audioElement.src = audioUrl;
+      audioElement.play();
+      audioContainer.style.display = "block";
+
+      progressBar.style.width = "100%";
+      progressText.textContent = "Completed!";
+      showToast("Audio generated successfully!", "success");
+    } catch (err) {
+      console.error(err);
+      showToast("Error generating audio.", "error");
+      progressText.textContent = "Failed!";
+    } finally {
+      setTimeout(() => {
+        progressContainer.style.display = "none";
+        progressBar.style.width = "0%";
+      }, 3000);
+    }
+  });
+
+  /* -------------------------------
+     Fetch TTS from ElevenLabs
+  ------------------------------- */
+  async function fetchTTS(text, voiceId) {
+    const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "xi-api-key": ELEVEN_API_KEY
+      },
+      body: JSON.stringify({
+        text: text,
+        voice_settings: { stability: 0.7, similarity_boost: 0.85 }
+      })
+    });
+
+    if (!response.ok) throw new Error("Failed to generate TTS");
+    const arrayBuffer = await response.arrayBuffer();
+    return new Blob([arrayBuffer], { type: "audio/mpeg" });
+  }
+
+  /* -------------------------------
+     Toast Notification
+  ------------------------------- */
+  function showToast(message, type = "success") {
+    const toast = document.createElement("div");
+    toast.classList.add("toast", type);
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    toast.style.display = "block";
+
+    setTimeout(() => {
+      toast.style.opacity = "0";
+      setTimeout(() => toast.remove(), 400);
+    }, 3000);
+  }
+
+  /* -------------------------------
+     Character Count
+  ------------------------------- */
+  const charCount = document.querySelector(".char-count");
+  if (inputText && charCount) {
+    inputText.addEventListener("input", () => {
+      charCount.textContent = `${inputText.value.length} characters`;
+    });
+  }
 });
