@@ -1,7 +1,7 @@
 // ========================================
-// TalkVerse - Complete JavaScript
+// TalkVerse - Complete JavaScript (FIXED)
 // Version: 2.0.0
-// ElevenLabs API Integration
+// Direct ElevenLabs API Integration
 // ========================================
 
 // ========================================
@@ -21,8 +21,8 @@ const CONFIG = {
 let state = {
     currentAudioBlob: null,
     currentAudioUrl: null,
-    history: JSON.parse(localStorage.getItem('ttsHistory')) || [],
-    settings: JSON.parse(localStorage.getItem('ttsSettings')) || {
+    history: [],
+    settings: {
         theme: 'purple',
         textSize: 'medium',
         autoPlay: false,
@@ -118,13 +118,33 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function initializeApp() {
     try {
+        // Load from localStorage
+        const savedHistory = localStorage.getItem('ttsHistory');
+        const savedSettings = localStorage.getItem('ttsSettings');
+        
+        if (savedHistory) {
+            try {
+                state.history = JSON.parse(savedHistory);
+            } catch (e) {
+                console.error('Error loading history:', e);
+                state.history = [];
+            }
+        }
+        
+        if (savedSettings) {
+            try {
+                state.settings = { ...state.settings, ...JSON.parse(savedSettings) };
+            } catch (e) {
+                console.error('Error loading settings:', e);
+            }
+        }
+        
         loadSettings();
         setupEventListeners();
         updateHistory();
         updateStats();
         loadVoiceLibrary();
         
-        // Show welcome message
         setTimeout(() => {
             showToast('Welcome to TalkVerse! 🎙️', 'success');
         }, 500);
@@ -140,27 +160,21 @@ function initializeApp() {
 // Event Listeners Setup
 // ========================================
 function setupEventListeners() {
-    // Text input events
     const textInput = document.getElementById('textInput');
     if (textInput) {
         textInput.addEventListener('input', updateCharCount);
-        textInput.addEventListener('paste', handlePaste);
+        textInput.addEventListener('paste', () => {
+            setTimeout(updateCharCount, 100);
+        });
     }
 
-    // Range control events
     setupRangeControls();
-
-    // Keyboard shortcuts
     document.addEventListener('keydown', handleKeyboardShortcuts);
 
-    // Audio element events
     const audioElement = document.getElementById('audioElement');
     if (audioElement) {
         audioElement.addEventListener('loadedmetadata', updateAudioDuration);
-        audioElement.addEventListener('ended', handleAudioEnded);
     }
-
-    console.log('✅ Event listeners setup complete');
 }
 
 function setupRangeControls() {
@@ -178,29 +192,15 @@ function setupRangeControls() {
     });
 }
 
-function handlePaste(e) {
-    setTimeout(() => {
-        updateCharCount();
-        showToast('Text pasted! Ready to convert.', 'success');
-    }, 100);
-}
-
 function handleKeyboardShortcuts(e) {
-    // Ctrl/Cmd + Enter: Convert
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
         convertText();
     }
     
-    // Ctrl/Cmd + K: Clear
     if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         clearText();
-    }
-
-    // Escape: Close/Stop
-    if (e.key === 'Escape') {
-        hideAudioPlayer();
     }
 }
 
@@ -208,7 +208,6 @@ function handleKeyboardShortcuts(e) {
 // Tab Management
 // ========================================
 function switchTab(tabName) {
-    // Remove active class from all tabs and contents
     document.querySelectorAll('.tab').forEach(tab => {
         tab.classList.remove('active');
     });
@@ -217,10 +216,11 @@ function switchTab(tabName) {
         content.classList.remove('active');
     });
     
-    // Add active class to selected tab and content
-    const clickedTab = event.target.closest('.tab');
-    if (clickedTab) {
-        clickedTab.classList.add('active');
+    if (event && event.target) {
+        const clickedTab = event.target.closest('.tab');
+        if (clickedTab) {
+            clickedTab.classList.add('active');
+        }
     }
     
     const tabContent = document.getElementById(tabName);
@@ -228,7 +228,6 @@ function switchTab(tabName) {
         tabContent.classList.add('active');
     }
     
-    // Load specific content if needed
     if (tabName === 'voices') {
         loadVoiceLibrary();
     } else if (tabName === 'history') {
@@ -250,7 +249,6 @@ function updateCharCount() {
     const count = text.length;
     charCountElement.textContent = count;
     
-    // Change color if approaching limit
     const charCountContainer = document.querySelector('.char-count');
     if (charCountContainer) {
         if (count > CONFIG.MAX_CHARS * 0.9) {
@@ -262,7 +260,6 @@ function updateCharCount() {
         }
     }
     
-    // Limit text if exceeds max
     if (count > CONFIG.MAX_CHARS) {
         textInput.value = text.substring(0, CONFIG.MAX_CHARS);
         showToast(`Maximum ${CONFIG.MAX_CHARS} characters allowed!`, 'error');
@@ -280,13 +277,12 @@ function clearText() {
 }
 
 // ========================================
-// Text to Speech Conversion
+// Text to Speech Conversion (FIXED)
 // ========================================
 async function convertText() {
     const textInput = document.getElementById('textInput');
     const text = textInput ? textInput.value.trim() : '';
     
-    // Validation
     if (!text) {
         showToast('Please enter some text to convert!', 'error');
         return;
@@ -297,23 +293,21 @@ async function convertText() {
         return;
     }
     
-    // Get settings
     const voiceId = document.getElementById('voiceSelect')?.value || CONFIG.DEFAULT_VOICE_ID;
     const stability = parseFloat(document.getElementById('stabilityControl')?.value || 0.5);
     const similarity = parseFloat(document.getElementById('similarityControl')?.value || 0.75);
     const style = parseFloat(document.getElementById('styleControl')?.value || 0);
     
-    // Show loading
     showLoading();
     showProgress(0, 'Preparing conversion...');
     
     try {
-        // Prepare API request
         const apiKey = state.settings.apiKey || CONFIG.API_KEY;
         const url = `${CONFIG.API_ENDPOINT}/${voiceId}`;
         
-        console.log('🎤 Converting text with voice:', voiceId);
-        showProgress(30, 'Sending to AI...');
+        console.log('🎤 Converting text to speech...');
+        console.log('API URL:', url);
+        showProgress(30, 'Connecting to ElevenLabs AI...');
         
         const response = await fetch(url, {
             method: 'POST',
@@ -337,17 +331,21 @@ async function convertText() {
         showProgress(70, 'Processing audio...');
         
         if (!response.ok) {
-            const errorData = await response.json().catch(() => null);
-            throw new Error(errorData?.detail?.message || `API Error: ${response.status} - ${response.statusText}`);
+            let errorMessage = `API Error: ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.detail?.message || errorMessage;
+            } catch (e) {
+                errorMessage = await response.text() || errorMessage;
+            }
+            throw new Error(errorMessage);
         }
         
-        // Get audio blob
         const audioBlob = await response.blob();
         showProgress(90, 'Finalizing...');
         
-        console.log('✅ Audio generated successfully!', audioBlob.size, 'bytes');
+        console.log('✅ Audio generated:', audioBlob.size, 'bytes');
         
-        // Create audio URL
         if (state.currentAudioUrl) {
             URL.revokeObjectURL(state.currentAudioUrl);
         }
@@ -355,7 +353,6 @@ async function convertText() {
         state.currentAudioBlob = audioBlob;
         state.currentAudioUrl = URL.createObjectURL(audioBlob);
         
-        // Display audio
         const audioElement = document.getElementById('audioElement');
         if (audioElement) {
             audioElement.src = state.currentAudioUrl;
@@ -363,26 +360,22 @@ async function convertText() {
         
         showProgress(100, 'Complete!');
         
-        // Show audio player
         setTimeout(() => {
             hideLoading();
             hideProgress();
             showAudioPlayer();
             
-            // Auto play if enabled
             if (state.settings.autoPlay && audioElement) {
                 audioElement.play().catch(err => {
-                    console.log('Autoplay blocked:', err);
+                    console.log('Autoplay blocked by browser');
                 });
             }
             
-            // Auto download if enabled
             if (state.settings.autoDownload) {
                 downloadAudio();
             }
         }, 500);
         
-        // Save to history
         if (state.settings.saveHistory) {
             const voiceName = VOICE_LIBRARY.find(v => v.id === voiceId)?.name || 'Unknown';
             saveToHistory({
@@ -405,10 +398,12 @@ async function convertText() {
         hideProgress();
         
         let errorMessage = 'Conversion failed: ';
-        if (error.message.includes('API Error: 401')) {
+        if (error.message.includes('401')) {
             errorMessage += 'Invalid API key. Please check your settings.';
-        } else if (error.message.includes('API Error: 429')) {
+        } else if (error.message.includes('429')) {
             errorMessage += 'Rate limit exceeded. Please wait and try again.';
+        } else if (error.message.includes('quota')) {
+            errorMessage += 'API quota exceeded. Please try again later or use your own API key.';
         } else {
             errorMessage += error.message;
         }
@@ -432,9 +427,7 @@ function showProgress(percent = 0, message = 'Processing...') {
 
 function hideProgress() {
     const container = document.getElementById('progressContainer');
-    if (container) {
-        container.style.display = 'none';
-    }
+    if (container) container.style.display = 'none';
 }
 
 // ========================================
@@ -442,9 +435,7 @@ function hideProgress() {
 // ========================================
 function showAudioPlayer() {
     const player = document.getElementById('audioPlayer');
-    if (player) {
-        player.style.display = 'block';
-    }
+    if (player) player.style.display = 'block';
 }
 
 function hideAudioPlayer() {
@@ -468,13 +459,8 @@ function updateAudioDuration() {
     }
 }
 
-function handleAudioEnded() {
-    console.log('🎵 Audio playback ended');
-}
-
 function formatDuration(seconds) {
     if (!seconds || isNaN(seconds)) return '0:00';
-    
     const mins = Math.floor(seconds / 60);
     const secs = Math.floor(seconds % 60);
     return `${mins}:${secs.toString().padStart(2, '0')}`;
@@ -498,10 +484,9 @@ function downloadAudio() {
         document.body.removeChild(link);
         
         showToast('Audio downloaded! 💾', 'success');
-        console.log('✅ Audio downloaded successfully');
     } catch (error) {
-        console.error('❌ Download error:', error);
-        showToast('Download failed. Please try again.', 'error');
+        console.error('Download error:', error);
+        showToast('Download failed', 'error');
     }
 }
 
@@ -511,7 +496,7 @@ function shareAudio() {
     if (navigator.share) {
         navigator.share({
             title: 'TalkVerse Audio',
-            text: `Listen to this text: ${text.substring(0, 100)}${text.length > 100 ? '...' : ''}`,
+            text: `Listen to this: ${text.substring(0, 100)}...`,
             url: window.location.href
         }).then(() => {
             showToast('Shared successfully!', 'success');
@@ -527,16 +512,15 @@ function shareAudio() {
 
 function copyToClipboard() {
     const text = document.getElementById('textInput')?.value || '';
-    
     if (!text) {
         showToast('No text to copy!', 'error');
         return;
     }
     
     navigator.clipboard.writeText(text).then(() => {
-        showToast('Text copied to clipboard! 📋', 'success');
+        showToast('Text copied! 📋', 'success');
     }).catch(() => {
-        showToast('Failed to copy text', 'error');
+        showToast('Failed to copy', 'error');
     });
 }
 
@@ -564,18 +548,13 @@ function loadVoiceLibrary() {
             <div class="voice-description">${voice.description}</div>
         </div>
     `).join('');
-    
-    console.log('✅ Voice library loaded:', VOICE_LIBRARY.length, 'voices');
 }
 
 function selectVoice(voiceId) {
     const voiceSelect = document.getElementById('voiceSelect');
-    if (voiceSelect) {
-        voiceSelect.value = voiceId;
-    }
+    if (voiceSelect) voiceSelect.value = voiceId;
     
     loadVoiceLibrary();
-    
     const voiceName = VOICE_LIBRARY.find(v => v.id === voiceId)?.name || 'Unknown';
     showToast(`Voice selected: ${voiceName}`, 'success');
 }
@@ -587,16 +566,14 @@ function saveToHistory(entry) {
     entry.id = Date.now();
     state.history.unshift(entry);
     
-    // Keep only last 50 entries
     if (state.history.length > 50) {
         state.history = state.history.slice(0, 50);
     }
     
     try {
         localStorage.setItem('ttsHistory', JSON.stringify(state.history));
-        console.log('✅ History saved:', state.history.length, 'entries');
     } catch (error) {
-        console.error('❌ Error saving history:', error);
+        console.error('Error saving history:', error);
     }
 }
 
@@ -618,7 +595,7 @@ function updateHistory() {
     container.innerHTML = state.history.map(entry => `
         <div class="history-item">
             <div class="history-header">
-                <strong>🗣️ ${entry.voiceName}</strong>
+                <strong>🗣️ ${escapeHtml(entry.voiceName)}</strong>
                 <div class="history-actions">
                     <button class="btn-secondary btn-small" onclick="replayHistory(${entry.id})">
                         🔄 Replay
@@ -632,30 +609,19 @@ function updateHistory() {
             <div class="history-meta">
                 <span>📅 ${formatDate(entry.timestamp)}</span>
                 <span>📊 ${entry.charCount} chars</span>
-                <span>🎚️ Stability: ${entry.stability}</span>
-                <span>🎨 Similarity: ${entry.similarity}</span>
+                <span>🎚️ ${entry.stability}</span>
+                <span>🎨 ${entry.similarity}</span>
             </div>
         </div>
     `).join('');
-    
-    console.log('✅ History updated:', state.history.length, 'entries');
 }
 
 function updateStats() {
-    // Total conversions
-    const totalConversions = document.getElementById('totalConversions');
-    if (totalConversions) {
-        totalConversions.textContent = state.history.length;
-    }
+    document.getElementById('totalConversions').textContent = state.history.length;
     
-    // Total characters
     const totalChars = state.history.reduce((sum, entry) => sum + entry.charCount, 0);
-    const totalCharsElement = document.getElementById('totalChars');
-    if (totalCharsElement) {
-        totalCharsElement.textContent = totalChars.toLocaleString();
-    }
+    document.getElementById('totalChars').textContent = totalChars.toLocaleString();
     
-    // Most used voice
     const voiceCounts = {};
     state.history.forEach(entry => {
         voiceCounts[entry.voiceName] = (voiceCounts[entry.voiceName] || 0) + 1;
@@ -665,52 +631,31 @@ function updateStats() {
         ? Object.keys(voiceCounts).reduce((a, b) => voiceCounts[a] > voiceCounts[b] ? a : b)
         : '-';
     
-    const favoriteVoiceElement = document.getElementById('favoriteVoice');
-    if (favoriteVoiceElement) {
-        favoriteVoiceElement.textContent = mostUsedVoice;
-    }
+    document.getElementById('favoriteVoice').textContent = mostUsedVoice;
     
-    // Estimate total time (assuming ~150 words per minute, ~5 chars per word)
     const estimatedSeconds = Math.round(totalChars / 5 / 150 * 60);
     const minutes = Math.floor(estimatedSeconds / 60);
     const seconds = estimatedSeconds % 60;
-    const totalTimeElement = document.getElementById('totalTime');
-    if (totalTimeElement) {
-        totalTimeElement.textContent = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
-    }
+    document.getElementById('totalTime').textContent = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
 }
 
 function replayHistory(id) {
     const entry = state.history.find(h => h.id === id);
     if (!entry) return;
     
-    // Fill form with history data
-    const textInput = document.getElementById('textInput');
-    const voiceSelect = document.getElementById('voiceSelect');
-    const stabilityControl = document.getElementById('stabilityControl');
-    const similarityControl = document.getElementById('similarityControl');
-    const styleControl = document.getElementById('styleControl');
+    document.getElementById('textInput').value = entry.text;
+    document.getElementById('voiceSelect').value = entry.voiceId;
+    document.getElementById('stabilityControl').value = entry.stability;
+    document.getElementById('similarityControl').value = entry.similarity;
+    document.getElementById('styleControl').value = entry.style || 0;
     
-    if (textInput) textInput.value = entry.text;
-    if (voiceSelect) voiceSelect.value = entry.voiceId;
-    if (stabilityControl) stabilityControl.value = entry.stability;
-    if (similarityControl) similarityControl.value = entry.similarity;
-    if (styleControl) styleControl.value = entry.style || 0;
-    
-    // Update displays
     updateCharCount();
-    const stabilityValue = document.getElementById('stabilityValue');
-    const similarityValue = document.getElementById('similarityValue');
-    const styleValue = document.getElementById('styleValue');
+    document.getElementById('stabilityValue').textContent = entry.stability;
+    document.getElementById('similarityValue').textContent = entry.similarity;
+    document.getElementById('styleValue').textContent = entry.style || 0;
     
-    if (stabilityValue) stabilityValue.textContent = entry.stability;
-    if (similarityValue) similarityValue.textContent = entry.similarity;
-    if (styleValue) styleValue.textContent = entry.style || 0;
-    
-    // Switch to convert tab
     switchTab('convert');
-    
-    showToast('History loaded! Click convert to replay.', 'success');
+    showToast('History loaded!', 'success');
 }
 
 function deleteHistoryItem(id) {
@@ -718,11 +663,11 @@ function deleteHistoryItem(id) {
     localStorage.setItem('ttsHistory', JSON.stringify(state.history));
     updateHistory();
     updateStats();
-    showToast('History item deleted', 'success');
+    showToast('Deleted', 'success');
 }
 
 function clearHistory() {
-    if (!confirm('Are you sure you want to clear all history?')) return;
+    if (!confirm('Clear all history?')) return;
     
     state.history = [];
     localStorage.setItem('ttsHistory', JSON.stringify(state.history));
@@ -748,89 +693,63 @@ function exportHistory() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        
         URL.revokeObjectURL(url);
-        showToast('History exported!', 'success');
+        
+        showToast('Exported!', 'success');
     } catch (error) {
-        console.error('❌ Export error:', error);
-        showToast('Export failed. Please try again.', 'error');
+        showToast('Export failed', 'error');
     }
 }
 
 // ========================================
-// Settings Management
+// Settings
 // ========================================
 function loadSettings() {
-    // Apply theme
     document.body.className = `theme-${state.settings.theme} text-${state.settings.textSize}`;
     
-    // Set form values
-    const themeSelect = document.getElementById('themeSelect');
-    const textSizeSelect = document.getElementById('textSizeSelect');
-    const autoPlaySelect = document.getElementById('autoPlaySelect');
-    const saveHistorySelect = document.getElementById('saveHistorySelect');
-    const autoDownloadSelect = document.getElementById('autoDownloadSelect');
+    document.getElementById('themeSelect').value = state.settings.theme;
+    document.getElementById('textSizeSelect').value = state.settings.textSize;
+    document.getElementById('autoPlaySelect').value = state.settings.autoPlay.toString();
+    document.getElementById('saveHistorySelect').value = state.settings.saveHistory.toString();
+    document.getElementById('autoDownloadSelect').value = state.settings.autoDownload.toString();
+    
     const apiKeyInput = document.getElementById('apiKeyInput');
-    
-    if (themeSelect) themeSelect.value = state.settings.theme;
-    if (textSizeSelect) textSizeSelect.value = state.settings.textSize;
-    if (autoPlaySelect) autoPlaySelect.value = state.settings.autoPlay.toString();
-    if (saveHistorySelect) saveHistorySelect.value = state.settings.saveHistory.toString();
-    if (autoDownloadSelect) autoDownloadSelect.value = state.settings.autoDownload.toString();
-    
-    if (apiKeyInput && state.settings.apiKey && state.settings.apiKey !== CONFIG.API_KEY) {
+    if (apiKeyInput && state.settings.apiKey !== CONFIG.API_KEY) {
         apiKeyInput.value = state.settings.apiKey;
     }
-    
-    console.log('✅ Settings loaded');
 }
 
 function saveSettings() {
-    const themeSelect = document.getElementById('themeSelect');
-    const textSizeSelect = document.getElementById('textSizeSelect');
-    const autoPlaySelect = document.getElementById('autoPlaySelect');
-    const saveHistorySelect = document.getElementById('saveHistorySelect');
-    const autoDownloadSelect = document.getElementById('autoDownloadSelect');
-    const apiKeyInput = document.getElementById('apiKeyInput');
-    
     state.settings = {
-        theme: themeSelect?.value || 'purple',
-        textSize: textSizeSelect?.value || 'medium',
-        autoPlay: autoPlaySelect?.value === 'true',
-        saveHistory: saveHistorySelect?.value === 'true',
-        autoDownload: autoDownloadSelect?.value === 'true',
-        apiKey: apiKeyInput?.value || CONFIG.API_KEY
+        theme: document.getElementById('themeSelect').value,
+        textSize: document.getElementById('textSizeSelect').value,
+        autoPlay: document.getElementById('autoPlaySelect').value === 'true',
+        saveHistory: document.getElementById('saveHistorySelect').value === 'true',
+        autoDownload: document.getElementById('autoDownloadSelect').value === 'true',
+        apiKey: document.getElementById('apiKeyInput').value || CONFIG.API_KEY
     };
     
     try {
         localStorage.setItem('ttsSettings', JSON.stringify(state.settings));
         loadSettings();
-        showToast('Settings saved successfully!', 'success');
-        console.log('✅ Settings saved');
+        showToast('Settings saved!', 'success');
     } catch (error) {
-        console.error('❌ Error saving settings:', error);
         showToast('Failed to save settings', 'error');
     }
 }
 
 function changeTheme() {
-    const themeSelect = document.getElementById('themeSelect');
-    if (themeSelect) {
-        state.settings.theme = themeSelect.value;
-        document.body.className = `theme-${state.settings.theme} text-${state.settings.textSize}`;
-    }
+    state.settings.theme = document.getElementById('themeSelect').value;
+    document.body.className = `theme-${state.settings.theme} text-${state.settings.textSize}`;
 }
 
 function changeTextSize() {
-    const textSizeSelect = document.getElementById('textSizeSelect');
-    if (textSizeSelect) {
-        state.settings.textSize = textSizeSelect.value;
-        document.body.className = `theme-${state.settings.theme} text-${state.settings.textSize}`;
-    }
+    state.settings.textSize = document.getElementById('textSizeSelect').value;
+    document.body.className = `theme-${state.settings.theme} text-${state.settings.textSize}`;
 }
 
 // ========================================
-// UI Helper Functions
+// UI Helpers
 // ========================================
 function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
@@ -847,21 +766,14 @@ function showToast(message, type = 'info') {
 
 function showLoading() {
     const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.style.display = 'flex';
-    }
+    if (overlay) overlay.style.display = 'flex';
 }
 
 function hideLoading() {
     const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.style.display = 'none';
-    }
+    if (overlay) overlay.style.display = 'none';
 }
 
-// ========================================
-// Utility Functions
-// ========================================
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
@@ -870,8 +782,7 @@ function escapeHtml(text) {
 
 function formatDate(isoString) {
     try {
-        const date = new Date(isoString);
-        return date.toLocaleString();
+        return new Date(isoString).toLocaleString();
     } catch (error) {
         return 'Invalid date';
     }
@@ -881,5 +792,9 @@ function formatDate(isoString) {
 // Cleanup
 // ========================================
 window.addEventListener('beforeunload', () => {
-    // Revoke object URLs to free memory
-    if (state.currentAudioUrl
+    if (state.currentAudioUrl) {
+        URL.revokeObjectURL(state.currentAudioUrl);
+    }
+});
+
+console.log('✅ TalkVerse script loaded successfully!');
