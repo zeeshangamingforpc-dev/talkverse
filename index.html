@@ -3,37 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - AI Voice Platform</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <meta name="description" content="TalkVerse - Professional AI-powered text to speech converter with ElevenLabs. Convert any text into natural-sounding speech with multiple voice options.">
+    <meta name="keywords" content="text to speech, TTS, AI voice, ElevenLabs, speech synthesis, audio generation">
+    <meta name="author" content="TalkVerse">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="TalkVerse - Professional Text to Speech">
+    <meta property="og:description" content="Transform any text into natural-sounding speech with AI-powered voices">
+    <meta property="og:type" content="website">
+    
+    <title>TalkVerse - Professional Text to Speech Converter</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Main Container -->
     <div class="container">
+        
+        <!-- Header Section -->
         <div class="header">
-            <h1>TalkVerse</h1>
-            <p>Create AI-generated voices instantly</p>
+            <h1>🎙️ TalkVerse</h1>
+            <p>Professional AI-Powered Text to Speech with ElevenLabs</p>
         </div>
+
+        <!-- Navigation Tabs -->
         <div class="tabs">
-            <button class="tab active">Dashboard</button>
-            <button class="tab">History</button>
-            <button class="tab">Settings</button>
+            <button class="tab active" onclick="switchTab('convert')">
+                <span class="tab-icon">🎯</span>
+                <span>Convert</span>
+            </button>
+            <button class="tab" onclick="switchTab('voices')">
+                <span class="tab-icon">🗣️</span>
+                <span>Voices</span>
+            </button>
+            <button class="tab" onclick="switchTab('history')">
+                <span class="tab-icon">📜</span>
+                <span>History</span>
+            </button>
+            <button class="tab" onclick="switchTab('settings')">
+                <span class="tab-icon">⚙️</span>
+                <span>Settings</span>
+            </button>
         </div>
 
-        <div class="tab-content active">
-            <h2>Welcome to TalkVerse</h2>
-            <p>Select a voice and enter text to generate speech.</p>
-            <a href="dashboard.html">
-                <button class="btn-primary">Go to Dashboard</button>
-            </a>
+        <!-- ============================================
+             TAB 1: CONVERT (Main Conversion Interface)
+             ============================================ -->
+        <div id="convert" class="tab-content active">
+            
+            <!-- Text Input Section -->
+            <div class="input-group">
+                <label for="textInput">
+                    Enter Your Text 
+                    <span class="feature-badge">Max 5000 chars</span>
+                </label>
+                <textarea 
+                    id="textInput" 
+                    placeholder="Type or paste your text here... 
+
+Example:
+Hello! Welcome to TalkVerse. This is a professional text-to-speech converter powered by ElevenLabs AI. You can convert any text into natural-sounding speech with multiple voice options!
+
+Try using punctuation for natural pauses:
+- Commas create short pauses
+- Periods create longer pauses
+- Question marks add intonation
+- Exclamation marks add emphasis!
+
+Start typing or paste your content to begin..."
+                    maxlength="5000"
+                ></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span> / 5000 characters
+                </div>
+            </div>
+
+            <!-- Voice & Settings Controls -->
+            <div class="controls-grid">
+                
+                <!-- Voice Selection -->
+                <div class="control-item">
+                    <label for="voiceSelect">🗣️ Select Voice</label>
+                    <select id="voiceSelect">
+                        <option value="gP8LZQ3GGokV0MP5JYjg">Rachel - Female (Default)</option>
+                        <option value="21m00Tcm4TlvDq8ikWAM">Antoni - Male</option>
+                        <option value="AZnzlk1XvdvUeBnXmlld">Domi - Female</option>
+                        <option value="EXAVITQu4vr4xnSDxMaL">Bella - Female</option>
+                        <option value="ErXwobaYiN019PkySvjV">Josh - Male</option>
+                        <option value="MF3mGyEYCl7XYWbV9V6O">Elli - Female</option>
+                        <option value="TxGEqnHWrfWFTfGW9XjX">Sam - Male</option>
+                        <option value="VR6AewLTigWG4xSOukaG">Arnold - Male</option>
+                        <option value="pNInz6obpgDQGcFmaJgB">Adam - Male</option>
+                        <option value="yoZ06aMxZJJ28mfd3POQ">Dave - Male (British)</option>
+                    </select>
+                </div>
+
+                <!-- Stability Control -->
+                <div class="control-item">
+                    <label>🎚️ Stability: <span class="range-value" id="stabilityValue">0.5</span></label>
+                    <input type="range" id="stabilityControl" min="0" max="1" step="0.1" value="0.5">
+                    <small>Higher = More consistent delivery</small>
+                </div>
+
+                <!-- Similarity Control -->
+                <div class="control-item">
+                    <label>🎨 Similarity: <span class="range-value" id="similarityValue">0.75</span></label>
+                    <input type="range" id="similarityControl" min="0" max="1" step="0.1" value="0.75">
+                    <small>Higher = More accurate to voice</small>
+                </div>
+
+                <!-- Style Control -->
+                <div class="control-item">
+                    <label>⚡ Style: <span class="range-value" id="styleValue">0.0</span></label>
+                    <input type="range" id="styleControl" min="0" max="1" step="0.1" value="0">
+                    <small>Higher = More expressive</small>
+                </div>
+                
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Ready to convert...</div>
+            </div>
+
+            <!-- Audio Player -->
+            <div class="audio-player" id="audioPlayer">
+                <div class="audio-info">
+                    <span class="audio-title">🎵 Generated Audio</span>
+                    <span class="audio-duration" id="audioDuration">0:00</span>
+                </div>
+                <audio id="audioElement" controls></audio>
+                <div class="audio-actions">
+                    <button class="btn-success" onclick="downloadAudio()">
+                        💾 Download MP3
+                    </button>
+                    <button class="btn-secondary btn-small" onclick="shareAudio()">
+                        🔗 Share
+                    </button>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="buttons">
+                <button class="btn-primary" onclick="convertText()" id="convertBtn">
+                    <span class="btn-icon">🎤</span>
+                    <span>Convert to Speech</span>
+                </button>
+                <button class="btn-secondary" onclick="clearText()">
+                    <span class="btn-icon">🗑️</span>
+                    <span>Clear</span>
+                </button>
+            </div>
+
+            <!-- Quick Tips -->
+            <div class="tips">
+                <h4>💡 Quick Tips:</h4>
+                <ul>
+                    <li>Use proper punctuation for natural pauses and intonation</li>
+                    <li>Try different voices to find the perfect match for your content</li>
+                    <li>Adjust stability for more consistent or varied delivery</li>
+                    <li>Press <strong>Ctrl+Enter</strong> to quickly convert text</li>
+                    <li>Press <strong>Ctrl+K</strong> to clear the text field</li>
+                </ul>
+            </div>
+            
         </div>
 
-        <div class="tab-content">
-            <p>History will be shown here.</p>
+        <!-- ============================================
+             TAB 2: VOICES (Voice Library)
+             ============================================ -->
+        <div id="voices" class="tab-content">
+            <h3>🗣️ Available Voice Library</h3>
+            <p class="subtitle">Choose from our collection of professional AI voices powered by ElevenLabs</p>
+            
+            <div class="voice-grid" id="voiceGrid">
+                <!-- Voices will be loaded dynamically by JavaScript -->
+            </div>
         </div>
 
-        <div class="tab-content">
-            <p>Settings page.</p>
+        <!-- ============================================
+             TAB 3: HISTORY (Conversion History)
+             ============================================ -->
+        <div id="history" class="tab-content">
+            
+            <!-- Statistics Cards -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-number" id="totalConversions">0</div>
+                    <div class="stat-label">Total Conversions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-number" id="totalChars">0</div>
+                    <div class="stat-label">Characters Processed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎙️</div>
+                    <div class="stat-number" id="favoriteVoice">-</div>
+                    <div class="stat-label">Most Used Voice</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⏱️</div>
+                    <div class="stat-number" id="totalTime">0s</div>
+                    <div class="stat-label">Total Audio Time</div>
+                </div>
+            </div>
+
+            <!-- History Actions -->
+            <div class="buttons history-actions">
+                <button class="btn-secondary btn-small" onclick="clearHistory()">
+                    🗑️ Clear All History
+                </button>
+                <button class="btn-secondary btn-small" onclick="exportHistory()">
+                    📥 Export JSON
+                </button>
+            </div>
+
+            <!-- History List Container -->
+            <div class="history-container" id="historyContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <h3>No history yet!</h3>
+                    <p>Your converted texts will appear here</p>
+                </div>
+            </div>
+            
         </div>
+
+        <!-- ============================================
+             TAB 4: SETTINGS (Application Settings)
+             ============================================ -->
+        <div id="settings" class="tab-content">
+            <h3>⚙️ Application Settings</h3>
+            
+            <!-- Appearance Settings -->
+            <div class="settings-section">
+                <h4>🎨 Appearance</h4>
+                
+                <div class="input-group">
+                    <label for="themeSelect">Theme Color</label>
+                    <select id="themeSelect" onchange="changeTheme()">
+                        <option value="purple">Purple Gradient (Default)</option>
+                        <option value="blue">Ocean Blue</option>
+                        <option value="green">Forest Green</option>
+                        <option value="orange">Sunset Orange</option>
+                        <option value="dark">Dark Mode</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="textSizeSelect">Text Size</label>
+                    <select id="textSizeSelect" onchange="changeTextSize()">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium (Recommended)</option>
+                        <option value="large">Large</option>
+                        <option value="xlarge">Extra Large</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Functionality Settings -->
+            <div class="settings-section">
+                <h4>🔧 Functionality</h4>
+                
+                <div class="input-group">
+                    <label for="autoPlaySelect">Auto-play after conversion</label>
+                    <select id="autoPlaySelect">
+                        <option value="true">Enabled</option>
+                        <option value="false" selected>Disabled (Recommended)</option>
+                    </select>
+                    <small>Automatically play audio when conversion is complete</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="saveHistorySelect">Save conversion history</label>
+                    <select id="saveHistorySelect">
+                        <option value="true" selected>Enabled (Recommended)</option>
+                        <option value="false">Disabled</option>
+                    </select>
+                    <small>Store your conversions locally for future reference</small>
+                </div>
+
+                <div class="input-group">
+                    <label for="autoDownloadSelect">Auto-download generated audio</label>
+                    <select id="autoDownloadSelect">
+                        <option value="true">Enabled</option>
+                        <option value="false" selected>Disabled (Recommended)</option>
+                    </select>
+                    <small>Automatically download MP3 file after conversion</small>
+                </div>
+            </div>
+
+            <!-- API Configuration -->
+            <div class="settings-section">
+                <h4>🔑 API Configuration</h4>
+                
+                <div class="input-group">
+                    <label for="apiKeyInput">ElevenLabs API Key (Optional)</label>
+                    <input type="password" id="apiKeyInput" placeholder="Enter your API key or leave default">
+                    <small>
+                        <strong>Note:</strong> A demo API key is included for testing. 
+                        For production use, get your own API key from 
+                        <a href="https://elevenlabs.io/" target="_blank" style="color: var(--primary-color);">ElevenLabs</a>
+                        <br><br>
+                        Your API key is stored locally in your browser and never sent to any server except ElevenLabs.
+                    </small>
+                </div>
+            </div>
+
+            <!-- Save Settings Button -->
+            <button class="btn-primary" onclick="saveSettings()">
+                💾 Save All Settings
+            </button>
+
+            <!-- About Section -->
+            <div class="settings-info">
+                <h4>ℹ️ About TalkVerse</h4>
+                <p><strong>Version:</strong> 2.0.0</p>
+                <p><strong>Powered by:</strong> ElevenLabs AI</p>
+                <p><strong>Technology:</strong> HTML5, CSS3, JavaScript</p>
+                <p><strong>Created:</strong> 2024</p>
+                <p style="margin-top: 15px;">
+                    TalkVerse is a professional text-to-speech converter that uses advanced AI to generate 
+                    natural-sounding speech from any text. Perfect for content creators, educators, 
+                    accessibility needs, and anyone who wants to hear their text come to life.
+                </p>
+                <p style="margin-top: 10px;">
+                    Created with ❤️ for professional text-to-speech conversion
+                </p>
+            </div>
+            
+        </div>
+
     </div>
-    <script src="assets/js/script.js"></script>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Converting your text...</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
