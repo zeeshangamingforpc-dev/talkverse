@@ -3,38 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini TTS Synthesizer</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117; /* Dark background */
-        }
-        /* Custom scrollbar for a darker theme */
-        textarea::-webkit-scrollbar {
-            width: 8px;
-        }
-        textarea::-webkit-scrollbar-track {
-            background: #21262d;
-            border-radius: 10px;
-        }
-        textarea::-webkit-scrollbar-thumb {
-            background: #30363d;
-            border-radius: 10px;
-        }
-        textarea::-webkit-scrollbar-thumb:hover {
-            background: #4e5660;
-        }
-        .container-card {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            background-color: #161b22; /* Slightly lighter card background */
-            border: 1px solid #30363d;
-        }
-        #audioPlayer {
-            width: 100%;
-            height: 40px;
-            /* Invert audio player style for dark theme */
-            filter: invert(0.9) hue-rotate(180deg);
-        }
+    <title>TalkVerse</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>TalkVerse</h1>
+        <p class="sub-title">Text To Speech | AI Voice Generation</p>
+
+        <!-- Text input -->
+        <textarea id="inputText" placeholder="Enter your text (≤10000 chars)"></textarea>
+        <p id="charCount">0/10000</p>
+        <button id="improveTextBtn">✨ Improve Text Tone</button>
+        <button id="suggestInstructionsBtn">✨ Suggest Instructions</button>
+
+        <!-- Voice selection -->
+        <select id="voiceSelect">
+            <option value="Adam">Adam (Male Narrator)</option>
+            <option value="Brian">Brian (Emotional Dad)</option>
+            <option value="Sophia">Sophia (Empathetic Female)</option>
+            <option value="Emma">Emma (Soft Female)</option>
+        </select>
+        <textarea id="styleInstructions" placeholder="Custom Style/Tone Instructions (Optional)"></textarea>
+
+        <button id="generateBtn">Generate Speech</button>
+
+        <!-- Audio output -->
+        <div class="audio-container">
+            <audio id="audioPlayer" controls disabled></audio>
+        </div>
+
+        <p class="footer">Created by Zeeshan</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
