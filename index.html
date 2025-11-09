@@ -3,42 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TalkVerse - AI Text to Speech</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Gemini TTS Synthesizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117; /* Dark background */
+        }
+        /* Custom scrollbar for a darker theme */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #21262d;
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+        textarea::-webkit-scrollbar-thumb:hover {
+            background: #4e5660;
+        }
+        .container-card {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            background-color: #161b22; /* Slightly lighter card background */
+            border: 1px solid #30363d;
+        }
+        #audioPlayer {
+            width: 100%;
+            height: 40px;
+            /* Invert audio player style for dark theme */
+            filter: invert(0.9) hue-rotate(180deg);
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🎙️ TalkVerse</h1>
-        <p>AI Text To Speech</p>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-        <div class="input-group">
-            <label for="textInput">Enter Your Text</label>
-            <textarea id="textInput" placeholder="Type your text here..."></textarea>
-        </div>
+    <div class="container-card w-full max-w-4xl p-8 rounded-2xl">
+        <h1 class="text-3xl font-bold text-gray-50 mb-6 text-center">Gemini Text-to-Speech Studio</h1>
+        <p class="text-gray-400 mb-6 text-center">Enter your text and instructions to generate high-quality, custom-styled speech.</p>
 
-        <div class="input-group">
-            <label for="voiceSelect">Select Voice</label>
-            <select id="voiceSelect">
-                <option value="jdVRqFnO8jznZjspX89f">Eric (Male)</option>
-            </select>
-        </div>
-
-        <div class="buttons">
-            <button id="generateBtn">🎤 Generate Voice</button>
-        </div>
-
-        <div class="progress-container" id="progressContainer" style="display:none;">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Text Input Area -->
+            <div class="md:col-span-1">
+                <label for="inputText" class="block text-sm font-medium text-gray-300 mb-2">Text to Synthesize (Max 1000 Chars)</label>
+                <textarea id="inputText" rows="10" maxlength="1000"
+                    class="w-full p-4 border border-gray-700 bg-gray-800 text-gray-100 rounded-xl focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                    placeholder="E.g., Oh yeah… welcome, cool cat, to the smoothest ride in online car shopping.">Hello! Welcome to the new generation of text to speech powered by Gemini.</textarea>
+                <p id="charCount" class="text-right text-xs text-gray-500 mt-1">0/1000</p>
             </div>
-            <div class="progress-text" id="progressText">Generating Voice...</div>
+
+            <!-- Voice and Style Controls -->
+            <div class="md:col-span-1 space-y-4">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Voice & Style Settings</label>
+                
+                <div>
+                    <label for="voiceSelect" class="block text-xs font-medium text-gray-400 mb-1">Select Base Voice</label>
+                    <select id="voiceSelect" class="w-full p-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-lg focus:ring-blue-500 focus:border-blue-500">
+                        <option value="Kore">Kore (Firm/Confident)</option>
+                        <option value="Puck">Puck (Upbeat/Lively)</option>
+                        <option value="Zephyr">Zephyr (Bright/Energetic)</option>
+                        <option value="Charon">Charon (Informative)</option>
+                        <option value="Algieba">Algieba (Smooth)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="styleInstructions" class="block text-xs font-medium text-gray-400 mb-1">Custom Style/Tone Instructions (Optional)</label>
+                    <textarea id="styleInstructions" rows="6"
+                        class="w-full p-3 border border-gray-700 bg-gray-800 text-gray-100 rounded-xl focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                        placeholder="E.g., The tone is smooth and inviting, like a late-night jazz radio host."></textarea>
+                </div>
+            </div>
         </div>
 
-        <div class="audio-player" id="audioPlayer" style="display:none;">
-            <audio id="audioElement" controls></audio>
+        <!-- Action Button and Output -->
+        <div class="mt-8 space-y-4">
+            <button id="generateBtn"
+                class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed">
+                Generate Speech
+            </button>
+            <div id="loadingIndicator" class="hidden text-center text-blue-400 font-medium">
+                <svg class="animate-spin h-5 w-5 mr-3 inline text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Synthesizing Audio... This may take a moment.
+            </div>
+            
+            <div id="errorMessage" class="hidden p-3 bg-red-800/50 text-red-300 border border-red-700 rounded-lg"></div>
+
+            <div class="mt-6 p-4 bg-gray-700/50 rounded-xl">
+                <label class="block text-sm font-medium text-gray-300 mb-2">Generated Audio</label>
+                <audio id="audioPlayer" controls class="opacity-50" disabled></audio>
+            </div>
         </div>
+
     </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
