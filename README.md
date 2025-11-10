@@ -1,45 +1,53 @@
-# TalkVerse - AI Text-to-Speech Studio
+Text to Speech Website
 
-**Website Name:** TalkVerse  
-**Created by:** Zeeshan
+A modern and user-friendly Text-to-Speech web application that converts your written text into natural-sounding voice.
 
----
+✅ Features
 
-## 🔹 Overview
+🎤 Multiple Voices: Choose from different voices and languages
 
-TalkVerse is a **web-based Text-to-Speech (TTS) platform** powered by AI, allowing users to generate **high-quality speech from text**. Users can customize **voice, tone, pace, and style** to create natural, emotional, and expressive audio content.
+⚡ Instant Playback: Text is converted to speech in real time
 
-It is designed for **storytelling, motivational speeches, content creation, and voiceovers**. The platform also includes **text improvement and instruction suggestion features** powered by AI.
+🎚️ Customizable Controls: Adjust speed, pitch, and volume
 
----
+📱 Responsive Design: Works perfectly on both mobile and desktop
 
-## 🔹 Features
+💾 Download Audio: Save the generated speech as an MP3 file
 
-- **Text Input**
-  - Enter up to **10,000 characters** for TTS
-  - Optional **Improve Text Tone** button to refine text for smooth delivery
-  - Optional **Suggest Instructions** button to generate tone, pace, and mood suggestions
+🌈 Modern UI: Sleek design with smooth animations
 
-- **Voice Selection**
-  - Prebuilt AI voices available (Adam, Brian, Sophia, Emma)
-  - Select base voice and adjust instructions for emotional or stylistic delivery
+🎮 How to Use
 
-- **Generate Speech**
-  - Converts text + instructions to **audio** using AI TTS
-  - Plays generated audio directly in-browser
+Type your text inside the text box
 
-- **Responsive Dark Theme UI**
-  - Fully **mobile & desktop friendly**
-  - Modern dark design with smooth interactions
+Select your preferred voice, speed, pitch, and volume
 
-- **Audio Playback**
-  - Play, pause, and download generated speech
+Click Speak to generate the audio
 
----
+Use Play to listen
 
-## 🔹 Getting Started
+Click Download to save the audio
 
-### 1. Clone or Download Repository
-```bash
-git clone https://github.com/yourusername/talkverse.git
-cd talkverse
+🌍 Browser Support
+Browser	Support
+Chrome	✅
+Firefox	✅
+Safari	✅
+Edge	✅
+
+Requires Web Speech API, supported in most modern browsers
+
+🛠️ Technical Details
+
+HTML5 for structure
+
+CSS3 for styling & animations
+
+JavaScript for Web Speech API logic
+
+No external libraries — 100% vanilla code
+
+📜 License
+
+Free for personal and commercial use.
+Made with ❤️ using the Web Speech API.
